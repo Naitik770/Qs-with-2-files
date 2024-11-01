@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google-Like Homepage</title>
     <style>
-      
+        /* Add your existing CSS styles here */
         body {
            display: flex;
            flex-direction: column;
@@ -36,23 +36,19 @@
            box-shadow: 0 1px 8px rgba(32, 33, 36, 0.28);
            border-color: rgba(223, 225, 229, 0);
            position: relative;
-           
-           }
-          
-        
+        }
         
         .search-box {
            position: fixed;
            font-size: 17px;
-            height: 30px;
-            border: none;
-            width: 245px;
-            background-color: #45A3FA
-            margin-top: 2px;
-            outline: none;
-            margin-left: 27px;
+           height: 30px;
+           border: none;
+           width: 245px;
+           background-color: transparent;
+           margin-top: 2px;
+           outline: none;
+           margin-left: 10px;
         }
-        
         
         .buttons {
            margin-top: 20px;
@@ -60,7 +56,7 @@
            gap: 10px;
         }
         
-        .btn {
+        .btn, .bn {
            padding: 15px 25px;
            font-size: 14px;
            color: #3c4043;
@@ -77,7 +73,7 @@
         
         .sign-in {
            position: relative;
-           bottom: 130px;
+           bottom: 155px;
            left: 105px;
            padding: 10px 20px;
            font-size: 14px;
@@ -89,41 +85,33 @@
            text-decoration: none;
         }
         
-        .bn {
-           padding: 15px 25px;
-           font-size: 14px;
-           color: #3c4043;
-           background-color: #f8f9fa;
-           border: 1px solid #f8f9fa;
-           border-radius: 4px;
-           cursor: pointer;
-           box-shadow: 0 1px 1px rgba(60, 64, 67, 0.3);
+
+        #profile-picture {
+           display: none;
+           width: 40px;
+           height: 40px;
+           border-radius: 50%;
+           position: relative;
+           top: -130px;
+           right: -105px;
         }
-        .searchimg{
-           position: absolute;
-            left: 10px;
-            top: 48%;
-            transform: translateY(-50%);
-            height: 20px;
-       
-        }
-        
-      
     </style>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
-    <a href="#" class="sign-in">Sign In</a>
+    <a href="#" class="sign-in" id="signInButton" onclick="handleAuthClick()">Sign In</a>
+    <img id="profile-picture" alt="Profile Picture">
     <div class="logo">Query Search</div>
     
     <div class="search-container">
-    
+      
         <input type="text" class="search-box" id="searchQuery" spellcheck="true" placeholder="Type here..." required>
     </div>
     <div class="buttons">
         <button class="btn" onclick="search()">Query Search</button>
-            </div>
-            <br>
-        <button class="bn">I'm Feeling Lucky</button>
+    </div>
+    <br>
+    <button class="bn">I'm Feeling Lucky</button>
 
     <script>
         function search() {
@@ -132,7 +120,27 @@
                 window.location.href = `results.html?q=${encodeURIComponent(query)}`;
             }
         }
+
+        // Load Google Sign-In client
+        window.onload = () => {
+            google.accounts.id.initialize({
+                client_id: "390800348887-cr9t88ijgtm7f41d09gj4gm80tj76qmr.apps.googleusercontent.com", // Replace with your Google Client ID
+                callback: handleCredentialResponse
+            });
+        }
+
+        // Handle sign-in click
+        function handleAuthClick() {
+            google.accounts.id.prompt(); // Triggers the Google Sign-In popup
+        }
+
+        // Handle Google Sign-In response
+        function handleCredentialResponse(response) {
+            google.accounts.id.decodeJwtResponse(response.credential); // Get user info
+            document.getElementById("signInButton").style.display = "none";
+            document.getElementById("profile-picture").src = response.clientData.profilePicture;
+            document.getElementById("profile-picture").style.display = "block";
+        }
     </script>
-    
 </body>
 </html>
