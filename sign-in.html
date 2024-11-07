@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://accounts.google.com/gsi/client" async defer></script> <!-- Google Sign-In Library -->
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script> <!-- JWT Decode Library -->
     <script>
         function handleCredentialResponse(response) {
             console.log("Encoded JWT ID token: " + response.credential);
-            
+
             // Decode the JWT token to get user info (profile)
-            const userObject = jwt_decode(response.credential); // Using jwt_decode library
+            const userObject = jwt_decode(response.credential);
             console.log(userObject); // User info (including profile picture)
 
             // Save user info in localStorage
@@ -21,81 +22,158 @@
 
         window.onload = function () {
             google.accounts.id.initialize({
-                client_id: "390800348887-a3nr0ugpilk4ajouog0iuliqth7b0vj9.apps.googleusercontent.com", // Replace with your actual client ID
+                client_id: "390800348887-a3nr0ugpilk4ajouog0iuliqth7b0vj9.apps.googleusercontent.com",
                 callback: handleCredentialResponse
             });
             google.accounts.id.renderButton(
                 document.getElementById("google-signin-button"), 
-                { theme: "outline", size: "large" } // Customizable button options
+                { theme: "outline", size: "large" }
             );
         };
 
         // Handle normal form submission for username/password
-        document.getElementById('signin-form').onsubmit = function(event) {
-            event.preventDefault(); // Prevent default form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('signin-form').onsubmit = function(event) {
+                event.preventDefault(); // Prevent default form submission
 
-            // You can add authentication logic here (e.g., check the username/password)
-            console.log('Form submitted with:', {
-                username: document.getElementById('username').value,
-                password: document.getElementById('password').value
-            });
+                // Add authentication logic here (if needed)
+                console.log('Form submitted with:', {
+                    username: document.getElementById('username').value,
+                    password: document.getElementById('password').value
+                });
 
-            // After successful authentication, redirect to index.html
-            window.location.href = 'index.html';
-        };
+                // After successful authentication, redirect to index.html
+                window.location.href = 'index.html';
+            };
+        });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script> <!-- JWT Decode Library -->
     <title>Sign In Page</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            background: #FFFFFF;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        main.container {
+            background: #FFFFFF;
+            min-width: 320px;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        main h1 {
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        main h1::before {
+            content: '';
+            position: absolute;
+            height: 4px;
+            width: 26px;
+            bottom: -6px;
+            left: 0;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #8e2de2, #4a00e0);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-field {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-field input {
+            width: 100%;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            outline: none;
+            border: none;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+            transition: border-color 0.3s ease;
+        }
+
+        .input-field input:focus {
+            border-bottom-color: #4a00e0;
+        }
+
+        form input[type="submit"] {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            width: 100%;
+            background: linear-gradient(to right, #4776E6, #8e54e9);
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        form input[type="submit"]:hover {
+            background: linear-gradient(to left, #4776E6, #8e54e9);
+        }
+
+        .footer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .footer span {
+            margin-bottom: 0.5rem;
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        .back-button {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background-color: transparent;
+            border: none;
+            font-size: 1.2rem;
+            color: #4a00e0;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .back-button:hover {
+            color: #8e2de2;
+        }
+    </style>
 </head>
 <body>
-   <style>
-      /* Your existing styles here */
-      /* ... (unchanged styles) ... */
-       body{
-                 display: flex;
-          flex-direction: column;
-          margin-top: 1rem;
-      }
-
-      .footer span {
-          color: rgba(0, 0, 0, 0.7);
-          font-size: 0.8rem;
-          text-align: center;
-      }
-         /* Back button style */
-      .back-button {
-          position: absolute;
-          top: 1rem;
-          left: 1rem;
-          background-color: transparent;
-          border: none;
-          font-size: 1.2rem;
-          cursor: pointer;
-          color: #4a00e0;
-          font-weight: 500;
-      }
-
-      .back-button:hover {
-          color: #8e2de2;
-          }
-   </style>
-    <button class="back-button" onclick="window.location.href='index.html'">&#8592; Back</button> <!-- Back button -->
+    <button class="back-button" onclick="window.location.href='index.html'">&#8592; Back</button>
     <main class="container">
         <h1>Sign in</h1>
         <form id="signin-form">
             <div class="input-field">
-                <input type="text" name="username" id="username" placeholder="Enter Your Username">
-                <div class="underline"></div>
+                <input type="text" name="username" id="username" placeholder="Enter Your Username" required>
             </div>
             <div class="input-field">
-                <input type="password" name="password" id="password" placeholder="Enter Your Password">
-                <div class="underline"></div>
+                <input type="password" name="password" id="password" placeholder="Enter Your Password" required>
             </div>
-
             <input type="submit" value="Sign in">
         </form>
-
         <div class="footer">
             <span>OR</span>
             <div id="google-signin-button"></div> <!-- Container for the Google Sign-In button -->
