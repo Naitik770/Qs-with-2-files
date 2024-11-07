@@ -110,7 +110,6 @@
             right: -105px;
         }
     </style>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
     <a href="#" class="sign-in" id="signInButton" onclick="handleAuthClick()">Sign In</a>
@@ -135,25 +134,9 @@
             }
         }
 
-        // Load Google Sign-In client
-        window.onload = () => {
-            google.accounts.id.initialize({
-                client_id: "390800348887-cr9t88ijgtm7f41d09gj4gm80tj76qmr.apps.googleusercontent.com", // Replace with your Google Client ID
-                callback: handleCredentialResponse
-            });
-        }
-
-        // Handle sign-in click
+        // When the 'Sign In' button is clicked, redirect to the sign-in page
         function handleAuthClick() {
-            google.accounts.id.prompt(); // Triggers the Google Sign-In popup
-        }
-
-        // Handle Google Sign-In response
-        function handleCredentialResponse(response) {
-            const userInfo = google.accounts.id.decodeJwtResponse(response.credential); // Get user info
-            document.getElementById("signInButton").style.display = "none"; // Hide sign-in button
-            document.getElementById("profile-picture").src = userInfo.picture; // Use profile picture
-            document.getElementById("profile-picture").style.display = "block"; // Show profile picture
+            window.location.href = 'sign-in.html'; // Redirect to sign-in.html
         }
     </script>
 </body>
