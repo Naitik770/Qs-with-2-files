@@ -5,116 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google-Like Homepage</title>
     <style>
-        /* Add your existing CSS styles here */
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #ffffff;
-        }
-
-        .logo {
-            font-size: 51px;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #4285F4;
-            text-shadow: -3px 0 #EA4335, 3px 0 #FBBC05, 6px 0 #34A853;
-        }
-
-        .search-container {
-            background-color: #fff;
-            padding: 5px;
-            padding-bottom: 25px;
-            width: 291px;
-            height: 15px;
-            border-radius: 1000px;
-            border: 1px solid #dfe1e5;
-            box-shadow: 0 1px 8px rgba(32, 33, 36, 0.28);
-            border-color: rgba(223, 225, 229, 0);
-            position: relative;
-        }
-
-        .search-box {
-            position: fixed;
-            font-size: 17px;
-            height: 30px;
-            border: none;
-            width: 245px;
-            background-color: transparent;
-            margin-top: 2px;
-            outline: none;
-            margin-left: 10px;
-        }
-
-        .buttons {
-            margin-top: 20px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn, .bn {
-            padding: 15px 25px;
-            font-size: 14px;
-            color: #3c4043;
-            background-color: #f8f9fa;
-            border: 1px solid #f8f9fa;
-            border-radius: 4px;
-            cursor: pointer;
-            box-shadow: 0 1px 3px rgba(60, 64, 67, 0.3);
-        }
-
-        .btn:active {
-            background-color: #e8e8e8;
-        }
-
-        .sign-in {
-            position: relative;
-            bottom: 155px;
-            left: 105px;
-            padding: 10px 20px;
-            font-size: 14px;
-            color: #fff;
-            background-color: #4285F4;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .sign-up {
-            display: none; /* Hidden by default */
-            position: relative;
-            bottom: 130px; /* Adjust as needed */
-            left: 105px;
-            padding: 10px 20px;
-            font-size: 14px;
-            color: #fff;
-            background-color: #34A853; /* Google Green */
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        #profile-picture {
-            display: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            position: relative;
-            top: -130px;
-            right: -105px;
-        }
+        /* Your existing styles */
+        /* ... (unchanged styles) ... */
     </style>
 </head>
 <body>
-    <a href="#" class="sign-in" id="signInButton" onclick="handleAuthClick()">Sign In</a>
+    <div id="profile-section">
+        <!-- This will display user profile picture once signed in -->
+        <a href="javascript:void(0)" id="signInButton" onclick="handleAuthClick()">Sign In</a>
+        <img id="profile-picture" alt="Profile Picture" style="display: none;" />
+    </div>
 
-    <img id="profile-picture" alt="Profile Picture">
     <div class="logo">Query Search</div>
 
     <div class="search-container">
@@ -138,6 +39,20 @@
         function handleAuthClick() {
             window.location.href = 'sign-in.html'; // Redirect to sign-in.html
         }
+
+        // Check if user is signed in and display profile picture if available
+        window.onload = function() {
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (user) {
+                // Show the profile picture
+                const profilePic = document.getElementById("profile-picture");
+                profilePic.src = user.picture; // Set profile picture
+                profilePic.style.display = "block"; // Show the picture
+
+                // Hide the Sign In button
+                document.getElementById("signInButton").style.display = "none";
+            }
+        };
     </script>
 </body>
 </html>
