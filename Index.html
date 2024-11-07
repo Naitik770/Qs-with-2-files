@@ -146,22 +146,15 @@
         // Handle sign-in click
         function handleAuthClick() {
             google.accounts.id.prompt(); // Triggers the Google Sign-In popup
-            document.getElementById("signUpButton").style.display = "block"; // Show the sign-up button
         }
 
         // Handle Google Sign-In response
         function handleCredentialResponse(response) {
             const userInfo = google.accounts.id.decodeJwtResponse(response.credential); // Get user info
             document.getElementById("signInButton").style.display = "none"; // Hide sign-in button
-            document.getElementById("signUpButton").style.display = "none"; // Hide sign-up button
             document.getElementById("profile-picture").src = userInfo.picture; // Use profile picture
-            document.getElementById("profile-picture").style.display = "block";
+            document.getElementById("profile-picture").style.display = "block"; // Show profile picture
         }
-
-        function handleAuthClick() {
-    window.location.href = 'sign-in.html'; // Opens the sign-in page
-}
-
     </script>
 </body>
 </html>
