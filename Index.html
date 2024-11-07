@@ -114,7 +114,7 @@
 </head>
 <body>
     <a href="#" class="sign-in" id="signInButton" onclick="handleAuthClick()">Sign In</a>
-    <a href="#" class="sign-up" id="signUpButton" onclick="handleSignUp()">Sign Up with Google</a>
+
     <img id="profile-picture" alt="Profile Picture">
     <div class="logo">Query Search</div>
 
@@ -158,10 +158,10 @@
             document.getElementById("profile-picture").style.display = "block";
         }
 
-        function handleSignUp() {
-            // Sign-up logic can be added here if needed
-            alert("Sign Up functionality is not implemented yet.");
-        }
+        function handleAuthClick() {
+    window.location.href = 'sign-in.html'; // Opens the sign-in page
+}
+
     </script>
 </body>
 </html>
