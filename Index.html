@@ -90,12 +90,12 @@
 
         #profile-picture {
             display: none;
-            width: 45px;
-            height: 45px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             position: relative;
-            bottom: 155px;
-            left: 130px;
+            top: -130px;
+            right: -105px;
         }
     </style>
 </head>
@@ -103,7 +103,7 @@
     <div id="profile-section">
         <!-- This will display user profile picture once signed in -->
         <a href="javascript:void(0)" id="signInButton" onclick="handleAuthClick()">Sign In</a>
-        <img id="profile-picture" alt="Profile Picture" style="display: none;" />
+        <img id="profile-picture" alt="Profile Picture" style="display: none;" onclick="openProfile()" />
     </div>
 
     <div class="logo">Query Search</div>
@@ -116,33 +116,39 @@
     </div>
     <br>
     <button class="bn">I'm Feeling Lucky</button>
-
-    <script>
-        function search() {
-            const query = document.getElementById('searchQuery').value;
-            if (query) {
-                window.location.href = `results.html?q=${encodeURIComponent(query)}`;
-            }
-        }
-
+    
+        <script>
+           function search() {
+              const query = document.getElementById('searchQuery').value;
+              if (query) {
+                 window.location.href = `results.html?q=${encodeURIComponent(query)}`;
+              }
+           }
+        
         // When the 'Sign In' button is clicked, redirect to the sign-in page
         function handleAuthClick() {
-            window.location.href = 'sign-in.html'; // Redirect to sign-in.html
+           window.location.href = 'sign-in.html'; // Redirect to sign-in.html
         }
-
+        
+        // Function to open the profile page when the profile picture is clicked
+        function openProfile() {
+           window.location.href = 'profile.html'; // Redirect to profile.html
+        }
+        
         // Check if user is signed in and display profile picture if available
         window.onload = function() {
-            const user = JSON.parse(localStorage.getItem("user"));
-            if (user) {
-                // Show the profile picture
-                const profilePic = document.getElementById("profile-picture");
-                profilePic.src = user.picture; // Set profile picture
-                profilePic.style.display = "block"; // Show the picture
-
-                // Hide the Sign In button
-                document.getElementById("signInButton").style.display = "none";
-            }
+           const user = JSON.parse(localStorage.getItem("user"));
+           if (user) {
+              // Show the profile picture
+              const profilePic = document.getElementById("profile-picture");
+              profilePic.src = user.picture; // Set profile picture
+              profilePic.style.display = "block"; // Show the picture
+        
+              // Hide the Sign In button
+              document.getElementById("signInButton").style.display = "none";
+           }
         };
-    </script>
+        </script>
+   
 </body>
 </html>
