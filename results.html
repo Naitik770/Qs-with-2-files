@@ -167,126 +167,143 @@
     <div class="tab-container">
         <button type="button" id="web-search" class="tab active" data-type="web">WEB</button>
         <button type="button" id="image-search" class="tab" data-type="image">IMAGE</button>
-        <button type="button" id="books-search" class="tab" data-type="books">BOOKS</button>
         <button type="button" id="video-search" class="tab" data-type="video">VIDEO</button>
-        
+        <button type="button" id="books-search" class="tab" data-type="books">BOOKS</button>
     </div>
     <div class="results-info" id="resultsInfo">Loading results...</div>
     <div id="resultsContainer"></div>
 
     <script>
-        const apiKeys = {
-            web: 'AIzaSyATr6XBO1PfMf9a6DDkTwurXrPQB36I2BQ',
-            image: 'AIzaSyA_J9kXtIxGrWQ9mFTOlixoLppR5uldNE0',
-            video: 'AIzaSyD5ME5xg7klHmfrm3NGy2sOPl9kr3lCqa4',
-            books: 'AIzaSyCjguzisfSD3feJ4Fr1C9kq9WEmiAEk6XY'
-        };
-        const cseId = '06c7bdfb887e2443d';
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const query = urlParams.get('q');
-            document.getElementById('searchBox').value = query;
-
-            if (query) {
-                fetchResults(query);
-            }
-        });
-
-        function fetchResults(query, type = 'web') {
-            let apiKey = apiKeys[type];
-            let apiUrl = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cseId}&q=${query}`;
-
-            if (type === 'image') {
-                apiUrl += '&searchType=image';
-            } else if (type === 'video') {
-                apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&q=${query}&type=video&part=snippet&maxResults=10`;
-            } else if (type === 'books') {
-                apiUrl = `https://www.googleapis.com/books/v1/volumes?q=${query}&key=${apiKey}`;
-            }
-
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(data => displayResults(data, type))
-                .catch(error => console.error('Error fetching data:', error));
-        }
-
-        function displayResults(data, type) {
-            const resultsContainer = document.getElementById('resultsContainer');
-            const resultsInfo = document.getElementById('resultsInfo');
-            resultsContainer.innerHTML = '';
-
-            if (data.items) {
-                if (type === 'video') {
-                    resultsInfo.textContent = `Showing video results for "${document.getElementById('searchBox').value}"`;
-                    data.items.forEach(item => {
-                        const videoDiv = document.createElement('div');
-                        videoDiv.classList.add('video-result');
-                        videoDiv.innerHTML = `
-                            <iframe width="320" height="180" src="https://www.youtube.com/embed/${item.id.videoId}" frameborder="0" allowfullscreen></iframe>
-                            <span>${item.snippet.title}</span>
-                        `;
-                        resultsContainer.appendChild(videoDiv);
-                    });
-                } else if (type === 'books') {
-                    resultsInfo.textContent = `Showing book results for "${document.getElementById('searchBox').value}"`;
-                    data.items.forEach(item => {
-                        const bookDiv = document.createElement('div');
-                        bookDiv.classList.add('book-result');
-                        const imageUrl = item.volumeInfo.imageLinks ? item.volumeInfo.imageLinks.thumbnail : 'https://via.placeholder.com/128x192';
-                        bookDiv.innerHTML = `
-                            <img src="${imageUrl}" alt="${item.volumeInfo.title}">
-                            <span>${item.volumeInfo.title}</span>
-                            <p>Author: ${item.volumeInfo.authors ? item.volumeInfo.authors.join(', ') : 'Unknown'}</p>
-                            <a href="${item.volumeInfo.infoLink}" target="_blank">More Info</a>
-                        `;
-                        resultsContainer.appendChild(bookDiv);
-                    });
-                } else if (type === 'image') {
-                    resultsInfo.textContent = `Showing image results for "${document.getElementById('searchBox').value}"`;
-                    data.items.forEach(item => {
-                        const imageDiv = document.createElement('div');
-                        imageDiv.classList.add('image-result');
-                        imageDiv.innerHTML = `
-                            <a href="${item.image.contextLink}" target="_blank">
-                                <img src="${item.link}" alt="${item.title}">
-                            </a>
-                            <span>${item.title}</span>
-                        `;
-                        resultsContainer.appendChild(imageDiv);
-                    });
-                } else {
-                    resultsInfo.textContent = `About ${data.searchInformation.formattedTotalResults} results (${data.searchInformation.formattedSearchTime} seconds) for "${data.queries.request[0].searchTerms}"`;
-                    data.items.forEach(item => {
-                        const resultDiv = document.createElement('div');
-                        resultDiv.classList.add('result');
-                        resultDiv.innerHTML = `
-                            <span class="url">${item.displayLink}</span>
-                            <a href="${item.link}" target="_blank">${item.title}</a>
-                            <p>${item.snippet}</p>
-                        `;
-                        resultsContainer.appendChild(resultDiv);
-                    });
-                }
-            } else {
-                resultsInfo.textContent = 'No results found.';
-            }
-        }
-
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                const type = this.getAttribute('data-type');
-                const query = document.getElementById('searchBox').value;
-                if (query) {
-                    fetchResults(query, type);
-                }
-
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
         
+            const apiKeys = {
+    web: 'AIzaSyATr6XBO1PfMf9a6DDkTwurXrPQB36I2BQ',
+    image: 'AIzaSyA_J9kXtIxGrWQ9mFTOlixoLppR5uldNE0',
+    video: 'AIzaSyD5ME5xg7klHmfrm3NGy2sOPl9kr3lCqa4',
+    books: 'AIzaSyCjguzisfSD3feJ4Fr1C9kq9WEmiAEk6XY'
+};
+const cseId = '06c7bdfb887e2443d';
+
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get('q');
+    document.getElementById('searchBox').value = query;
+
+    if (query) {
+        fetchResults(query);
+    }
+});
+
+function fetchResults(query, type = 'web') {
+    let apiKey = apiKeys[type];
+    let apiUrl = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cseId}&q=${query}`;
+
+    if (type === 'image') {
+        apiUrl += '&searchType=image';
+    } else if (type === 'video') {
+        apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&q=${query}&type=video&part=snippet&maxResults=10`;
+    } else if (type === 'books') {
+        apiUrl = `https://www.googleapis.com/books/v1/volumes?q=${query}&key=${apiKey}`;
+    }
+
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            displayResults(data, query, type); // Pass query and type to displayResults
+        })
+        .catch(error => console.error('Error fetching data:', error));
+}
+
+function displayResults(data, query, type) {
+    const resultsContainer = document.getElementById('resultsContainer');
+    const resultsInfo = document.getElementById('resultsInfo');
+    resultsContainer.innerHTML = '';
+
+    if (type === 'image') {
+        // Check if the query is "lalit"
+        if (query.toLowerCase() === 'lalit', 'Lalit', 'lalit bola', 'Lalit bola', 'LALIT') {
+            resultsInfo.textContent = `Showing image results for "${query}"`;
+
+            // Add Lalit's image as the first result
+            const lalitDiv = document.createElement('div');
+            lalitDiv.classList.add('image-result');
+            lalitDiv.innerHTML = `
+                <a href="https://i.postimg.cc/v8vG4wWg/Screenshot-2024-11-21-18-07-43-93.jpg" target="_blank">
+                    <img src="https://i.postimg.cc/v8vG4wWg/Screenshot-2024-11-21-18-07-43-93.jpg" alt="Lalit's image">
+                </a>
+                <span>Lalit's image</span>
+            `;
+            resultsContainer.appendChild(lalitDiv);
+        }
+
+        // Continue displaying other image results if available
+        if (data.items) {
+            data.items.forEach(item => {
+                const imageDiv = document.createElement('div');
+                imageDiv.classList.add('image-result');
+                imageDiv.innerHTML = `
+                    <a href="${item.image.contextLink}" target="_blank">
+                        <img src="${item.link}" alt="${item.title}">
+                    </a>
+                    <span>${item.title}</span>
+                `;
+                resultsContainer.appendChild(imageDiv);
+            });
+        }
+    } else if (type === 'video') {
+        resultsInfo.textContent = `Showing video results for "${query}"`;
+        data.items.forEach(item => {
+            const videoDiv = document.createElement('div');
+            videoDiv.classList.add('video-result');
+            videoDiv.innerHTML = `
+                <iframe width="320" height="180" src="https://www.youtube.com/embed/${item.id.videoId}" frameborder="0" allowfullscreen></iframe>
+                <span>${item.snippet.title}</span>
+            `;
+            resultsContainer.appendChild(videoDiv);
+        });
+    } else if (type === 'books') {
+        resultsInfo.textContent = `Showing book results for "${query}"`;
+        data.items.forEach(item => {
+            const bookDiv = document.createElement('div');
+            bookDiv.classList.add('book-result');
+            const imageUrl = item.volumeInfo.imageLinks ? item.volumeInfo.imageLinks.thumbnail : 'https://via.placeholder.com/128x192';
+            bookDiv.innerHTML = `
+                <img src="${imageUrl}" alt="${item.volumeInfo.title}">
+                <span>${item.volumeInfo.title}</span>
+                <p>Author: ${item.volumeInfo.authors ? item.volumeInfo.authors.join(', ') : 'Unknown'}</p>
+                <a href="${item.volumeInfo.infoLink}" target="_blank">More Info</a>
+            `;
+            resultsContainer.appendChild(bookDiv);
+        });
+    } else {
+        resultsInfo.textContent = `About ${data.searchInformation.formattedTotalResults} results (${data.searchInformation.formattedSearchTime} seconds) for "${query}"`;
+        data.items.forEach(item => {
+            const resultDiv = document.createElement('div');
+            resultDiv.classList.add('result');
+            resultDiv.innerHTML = `
+                <span class="url">${item.displayLink}</span>
+                <a href="${item.link}" target="_blank">${item.title}</a>
+                <p>${item.snippet}</p>
+            `;
+            resultsContainer.appendChild(resultDiv);
+        });
+    }
+}
+
+document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', function () {
+        const type = this.getAttribute('data-type');
+        const query = document.getElementById('searchBox').value;
+        if (query) {
+            fetchResults(query, type);
+        }
+
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+    });
+});
+
     </script>
 </body>
 </html>
 
+        
