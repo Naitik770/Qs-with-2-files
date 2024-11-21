@@ -219,8 +219,9 @@ function displayResults(data, query, type) {
     resultsContainer.innerHTML = '';
 
     if (type === 'image') {
-        // Check if the query is "lalit"
-        if (query.toLowerCase() === 'lalit', 'Lalit', 'lalit bola', 'Lalit bola', 'LALIT') {
+        // Check if the query matches specific keywords
+        const keywords = ['lalit', 'Lalit', 'lalit bola', 'Lalit bola', 'LALIT'];
+        if (keywords.includes(query)) {
             resultsInfo.textContent = `Showing image results for "${query}"`;
 
             // Add Lalit's image as the first result
@@ -233,6 +234,8 @@ function displayResults(data, query, type) {
                 <span>Lalit's image</span>
             `;
             resultsContainer.appendChild(lalitDiv);
+        } else {
+            resultsInfo.textContent = `Showing image results for "${query}"`;
         }
 
         // Continue displaying other image results if available
@@ -289,6 +292,7 @@ function displayResults(data, query, type) {
     }
 }
 
+
 document.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', function () {
         const type = this.getAttribute('data-type');
@@ -306,4 +310,3 @@ document.querySelectorAll('.tab').forEach(tab => {
 </body>
 </html>
 
-        
