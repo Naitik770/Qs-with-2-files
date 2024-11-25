@@ -4,148 +4,253 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profile</title>
+  <link rel="stylesheet" href="styles.css">
   <style>
+    /* Your existing styles */
     body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       font-family: Arial, sans-serif;
-      margin-top: 30px;
-      color: #333;
+      background-color: #fff;
+      margin: 0;
+      padding: 0;
     }
 
-    h1 {
-      font-size: 1.5em;
-      margin-bottom: 15px;
+    .container {
+      max-width: 100%;
+      padding: 15px;
+      background-color: #fff;
+     
     }
 
-    #profile-picture {
-      display: none;
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      margin-bottom: 10px;
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    .info-section {
-      display: flex;
-      align-items: center;
-      margin: 20px 0;
-      font-size: 1em;
-    }
-
-    .info-icon {
-      font-size: 1.5em;
-      color: #007bff;
-      margin-right: 10px;
-    }
-
-    .info-icon img {
-      height: 30px;
-    }
-
-    .info-text {
-      display: flex;
+    .profile-info {
       flex-direction: column;
+      align-items: center;
+      
+      text-align: left;
+      
     }
 
-    .info-label {
-      font-weight: bold;
-    }
-
-    .info-value {
-      margin-top: 5px;
+    .profile-info p {
+      font-size: 18px;
       color: #555;
+      margin-bottom: 30px;
     }
 
-    #sign-out-btn {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 1em;
+    .btn-logout {
+      display: block;
+      width: 200px;
+      padding: 10px;
+      margin: 10px auto;
+      text-align: center;
+      background-color: #ff4d4d;
       color: #fff;
-      background-color: #007bff;
+      font-size: 16px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
     }
 
-    #sign-out-btn:hover {
-      background-color: #0056b3;
+    .btn-logout:hover {
+      background-color: #e04343;
     }
 
-    .back-button {
-      position: absolute;
-      top: 1rem;
-      left: 1rem;
+    .btn-back {
+      margin-bottom: 35px;
       background-color: transparent;
+      color: #4285F4;
       border: none;
-      font-size: 1.2rem;
-      color: #007bff;
+      margin-right: 200px;
+      font-size: 22px;
       cursor: pointer;
-      transition: color 0.3s ease;
     }
 
-    .back-button:hover {
-      color: #0056b3;
+    .profile-picture {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
     }
+
+    .profile-picture img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 2px solid #ddd;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+
+    .profile-picture input {
+      display: none;
+    }
+
+    .upload-btn {
+      background-color: #ff4d4d;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .upload-btn:hover {
+      background-color: #45a049;
+    }
+
+    /* Pencil icon styles */
+    .edit-icon img {
+      height:23px;
+      color: #4285F4;
+      margin-left: 20px;
+    }
+
+    .edit-input {
+      font-size: 18px;
+      border: none;
+      background: none;
+      outline: none;
+      color: #555;
+      width: 200px;
+      display: none;
+    }
+
+    .edit-input:focus {
+      border-bottom:2px solid #4285F4; 
+      
+    }
+    
   </style>
 </head>
 <body>
-  <button class="back-button" onclick="window.location.href='index.html'">&#8592; Back</button>
-  <h1>Profile</h1>
-  <img id="profile-picture" alt="Profile Picture">
 
-  <div id="user-info">
-    <div class="info-section">
-      <span class="info-icon"></span>
-      <span id="profile-pic-placeholder" class="info-text">Display profile picture here</span>
+  <div class="container">
+    <button class="btn-back" onclick="window.location.href='index.html'" id="back-btn">&#8592; Back</button>
+    <h1>User Profile</h1>
+    <!-- Profile Picture -->
+    <div class="profile-picture">
+      <img id="profile-pic" src="https://i.postimg.cc/Fsxcnzf5/727399.png" alt="Profile Picture">
+      <label class="upload-btn" for="upload-picture">Change Picture</label>
+      <input type="file" id="upload-picture" accept="image/*">
     </div>
-    <div class="info-section">
-      <span class="info-icon"><img src="https://i.postimg.cc/MH1kpGxx/user.png" alt="User.png"></span>
-      <div class="info-text">
-        <span class="info-label">Username:</span>
-        <span id="username-placeholder" class="info-value">display username here</span>
-      </div>
+
+    <!-- User Information -->
+    <div class="profile-info">
+      <p>
+        <strong>Name:</strong> <br>
+        <span id="user-name"></span>
+        <span class="edit-icon" id="edit-name-icon"><img src="https://i.postimg.cc/CxvcGfkF/860814.png" alt=""></span>
+        <input type="text" id="edit-name-input" class="edit-input">
+      </p>
+      <p><strong>Email:</strong> <span id="user-email"></span></p>
+      <p><strong>Status:</strong> <span id="email-status"></span></p>
     </div>
-    <div class="info-section">
-      <span class="info-icon"><img src="https://i.postimg.cc/NFvXHNhT/mail.png" alt="Mail.png"></span>
-      <div class="info-text">
-        <span class="info-label">Email:</span>
-        <span id="email-placeholder" class="info-value">display email here</span>
-      </div>
-    </div>
+
+    <!-- Log Out Button -->
+    <button class="btn-logout" id="logoutbtn">Log Out</button>
   </div>
 
-  <button id="sign-out-btn" onclick="signOut()">Sign Out</button>
+<script type="module">
 
-  <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
-  <script>
-    // Retrieve the user data from localStorage
-    const userString = localStorage.getItem("user");
-    if (userString) {
-      const userInfo = JSON.parse(userString);
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.9.0/firebase-app.js';
+  import { getAuth, signOut, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js';
 
-      // Display user information
-      document.getElementById("username-placeholder").textContent = userInfo.name || "Username not available";
-      document.getElementById("email-placeholder").textContent = userInfo.email || "Email not available";
+  // Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyAtAsCAld8L6Gn96mkDYXQZSMqQyf0TYxI",
+    authDomain: "simple-login-3f73a.firebaseapp.com",
+    projectId: "simple-login-3f73a",
+    storageBucket: "simple-login-3f73a.firebasestorage.app",
+    messagingSenderId: "622220968094",
+    appId: "1:622220968094:web:c219e77b41b4222555fb8f",
+    measurementId: "G-5LMTNYDPSB"
+  };
 
-      // Display profile picture if available
-      if (userInfo.picture) {
-        const profilePic = document.getElementById("profile-picture");
-        profilePic.src = userInfo.picture + "?sz=200"; // Request higher resolution (200x200 pixels)
-        profilePic.style.display = "block";
-        document.getElementById("profile-pic-placeholder").style.display = "none";
-      }
-    } else {
-      document.getElementById("user-info").textContent = "No user information available.";
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  const userNameElement = document.getElementById('user-name');
+  const userEmailElement = document.getElementById('user-email');
+  const emailStatusElement = document.getElementById('email-status');
+  const editNameIcon = document.getElementById('edit-name-icon');
+  const editNameInput = document.getElementById('edit-name-input');
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      userNameElement.textContent = user.displayName || extractNameFromEmail(user.email);
+      userEmailElement.textContent = user.email;
+      emailStatusElement.textContent = user.emailVerified ? "Verified" : "Not Verified";
+      emailStatusElement.style.color = user.emailVerified ? "#4caf50" : "#ff9800";
+
+      // Show the edit input when clicking the pencil icon
+      editNameIcon.addEventListener('click', () => {
+        editNameInput.style.display = 'inline';
+        editNameInput.value = userNameElement.textContent;
+        userNameElement.style.display = 'none';
+        editNameInput.focus();
+      });
+
+      // Save the new name on "Enter" or blur
+      const saveName = () => {
+        const newName = editNameInput.value.trim();
+        if (newName && newName !== userNameElement.textContent) {
+          updateProfile(user, { displayName: newName }).then(() => {
+            userNameElement.textContent = newName;
+          }).catch(console.error);
+        }
+        editNameInput.style.display = 'none';
+        userNameElement.style.display = 'inline';
+      };
+
+      editNameInput.addEventListener('blur', saveName);
+      editNameInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') saveName();
+      });
     }
+  });
 
-    // Sign out function
-    function signOut() {
-      localStorage.removeItem("user"); // Clear user data from localStorage
-      window.location.href = "https://searchspace.netlify.app"; // Redirect to index.html
+  function extractNameFromEmail(email) {
+    const name = email.split('@')[0];
+    return name.charAt(0).toUpperCase() + name.slice(1);
+  }
+  
+  logoutbtn.addEventListener('click', () => {
+     signOut(auth).then(() => {
+        localStorage.removeItem('profile-pic'); // Clear saved profile picture on logout
+        window.location.href = 'index.html'; // Redirect to index page after logout
+     }).catch((error) => {
+        console.error("Error signing out:", error);
+     });
+  });
+  
+    const uploadPictureInput = document.getElementById('upload-picture');
+  const profilePicElement = document.getElementById('profile-pic');
+  const backBtn = document.getElementById('back-btn');
+  const logoutBtn = document.getElementById('logout-btn');
+
+  // Check if a profile picture exists in localStorage
+  const savedProfilePic = localStorage.getItem('profile-pic');
+  if (savedProfilePic) {
+    profilePicElement.src = savedProfilePic; // Load the saved profile picture
+  }
+
+  // When the user selects a file
+  uploadPictureInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+
+      // Load the selected file into an image preview and save to localStorage
+      reader.onload = function (e) {
+        const base64Image = e.target.result;
+        profilePicElement.src = base64Image; // Update the displayed profile picture
+        localStorage.setItem('profile-pic', base64Image); // Save the picture in localStorage
+      };
+
+      reader.readAsDataURL(file);
     }
-  </script>
+  });
+
+</script>
+
 </body>
 </html>
