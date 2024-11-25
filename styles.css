@@ -1,0 +1,145 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    background: #FFFFFF;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+main.container {
+    background: #FFFFFF;
+    min-width: 320px;
+    padding: 2rem;
+    border-radius: 8px;
+}
+
+ h1{
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+ 
+h1::before {
+    content: '';
+    position: absolute;
+    height: 6px;
+    width: 28px;
+    bottom: -1px;
+    left: 0;
+    border-radius: 8px;
+    background: linear-gradient(45deg, #8e2de2, #4a00e0);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-field {
+    position: relative;
+    margin-bottom: 1.5rem;
+    
+}
+
+input {
+    width: 90%;
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+    outline: none;
+    margin: 8px;
+    border: none;
+    transform-origin: right;
+    border-bottom: 1.2px solid rgba(0, 0, 0, 0.3);
+    transition: border-color 0.3s ease-in-out;
+}
+
+input:focus {
+    border-bottom-color: #4a00e0;
+    transform: scaleY(1.1);
+}
+
+#sign-out-button,#submit {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    width: 100%;
+    background: linear-gradient(to right, #4776E6, #8e54e9);
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+#sign-out-button, #submit:hover {
+    background: linear-gradient(to left, #4776E6, #8e54e9);
+}
+
+
+#back {
+    position: relative;
+    display: inline-block;
+    bottom: 30px;
+    background-color: transparent;
+    border: none;
+    right:5px;
+    font-size: 1.2rem;
+    color: #4a00e0;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+#back:hover {
+    color: #8e2de2;
+}
+
+.or{
+   font-size: 1.3rem;
+   margin-left: 130px;
+}
+
+#loginback{
+position: relative;
+display: inline-block;
+bottom: 80px;
+background-color: transparent;
+border: none;
+right:5px;
+font-size: 1.2rem;
+color: #4a00e0;
+cursor: pointer;
+transition: color 0.3s ease;
+}
+
+#loginback:hover {
+   color: #8e2de2;
+}
+
+#resetpassword{
+   margin-top: 1rem;
+    padding: 0.5rem;
+    width: 100%;
+    background: linear-gradient(to right, #4776E6, #8e54e9);
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+
+   
+#resetpassword:hover{
+   background: linear-gradient(to left, #4776E6, #8e54e9);
+}
