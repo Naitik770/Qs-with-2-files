@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Profile</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Your existing styles */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 100%;
+      padding: 15px;
+      background-color: #fff;
+    }
+
+    .profile-info {
+      flex-direction: column;
+      align-items: center;
+      text-align: left;
+    }
+
+    .profile-info p {
+      font-size: 18px;
+      color: #555;
+      margin-bottom: 30px;
+    }
+
+    .btn-logout {
+      display: block;
+      width: 200px;
+      padding: 10px;
+      margin: 10px auto;
+      text-align: center;
+      background-color: #ff4d4d;
+      color: #fff;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn-logout:hover {
+      background-color: #e04343;
+    }
+
+    .btn-back {
+      margin-bottom: 35px;
+      background-color: transparent;
+      color: #4285F4;
+      border: none;
+      margin-right: 200px;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .profile-picture {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .profile-picture img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 2px solid #ddd;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+
+    .profile-picture input {
+      display: none;
+    }
+
+    .upload-btn {
+      background-color: #ff4d4d;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .upload-btn:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <button class="btn-back" onclick="window.location.href='index.html'" id="back-btn">&#8592; Back</button>
+    <h1>Google Profile</h1>
+    <!-- Profile Picture -->
+    <div class="profile-picture">
+      <img id="profile-pic" src="" alt="Profile Picture">
+    </div>
+
+    <!-- User Information -->
+    <div class="profile-info">
+      <p><strong>Name:</strong> <span id="user-name"></span></p>
+      <p><strong>Email:</strong> <span id="user-email"></span></p>
+    </div>
+
+    <!-- Log Out Button -->
+    <button class="btn-logout" id="logoutbtn">Log Out</button>
+  </div>
+
+<script>
+  
+  // Get the Google user data from localStorage
+  const googleUserData = JSON.parse(localStorage.getItem('user'));
+
+  if (googleUserData) {
+    // Display the Google user's profile picture, name, and email
+    document.getElementById('profile-pic').src = googleUserData.picture;
+    document.getElementById('user-name').textContent = googleUserData.name;
+    document.getElementById('user-email').textContent = googleUserData.email;
+  } 
+
+  // Log out functionality
+  const logoutbtn = document.getElementById('logoutbtn');
+  logoutbtn.addEventListener('click', () => {
+    signOut(auth).then(() => {
+      localStorage.removeItem('user'); // Remove Google user data from localStorage
+      window.location.href = 'index.html'; // Redirect to the home page after logout
+    }).catch((error) => {
+      console.error("Error signing out:", error);
+    });
+  });
+</script>
+
+</body>
+</html>
