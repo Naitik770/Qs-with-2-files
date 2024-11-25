@@ -1,183 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://accounts.google.com/gsi/client" async defer></script> <!-- Google Sign-In Library -->
-    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script> <!-- JWT Decode Library -->
-    <script>
-        function handleCredentialResponse(response) {
-            console.log("Encoded JWT ID token: " + response.credential);
-
-            // Decode the JWT token to get user info (profile)
-            const userObject = jwt_decode(response.credential);
-            console.log(userObject); // User info (including profile picture)
-
-            // Save user info in localStorage
-            localStorage.setItem("user", JSON.stringify(userObject));
-
-            // Redirect to index.html after successful sign-in
-            window.location.href = 'index.html';
-        }
-
-        window.onload = function () {
-            google.accounts.id.initialize({
-                client_id: "390800348887-a3nr0ugpilk4ajouog0iuliqth7b0vj9.apps.googleusercontent.com",
-                callback: handleCredentialResponse
-            });
-            google.accounts.id.renderButton(
-                document.getElementById("google-signin-button"), 
-                { theme: "outline", size: "large" }
-            );
-        };
-
-        // Handle normal form submission for username/password
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('signin-form').onsubmit = function(event) {
-                event.preventDefault(); // Prevent default form submission
-
-                // Add authentication logic here (if needed)
-                console.log('Form submitted with:', {
-                    username: document.getElementById('username').value,
-                    password: document.getElementById('password').value
-                });
-
-                // After successful authentication, redirect to index.html
-                window.location.href = 'index.html';
-            };
-        });
-    </script>
-    <title>Sign In Page</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap');
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Poppins", sans-serif;
-        }
-
-        body {
-            background: #FFFFFF;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        main.container {
-            background: #FFFFFF;
-            min-width: 320px;
-            padding: 2rem;
-            border-radius: 8px;
-            
-        }
-
-        main h1 {
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-
-        main h1::before {
-            content: '';
-            position: absolute;
-            height: 4px;
-            width: 26px;
-            bottom: -6px;
-            left: 0;
-            border-radius: 8px;
-            background: linear-gradient(45deg, #8e2de2, #4a00e0);
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .input-field {
-            position: relative;
-            margin-bottom: 1.5rem;
-        }
-
-        .input-field input {
-            width: 100%;
-            padding: 0.5rem 0;
-            font-size: 0.9rem;
-            outline: none;
-            border: none;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-            transition: border-color 0.3s ease;
-        }
-
-        .input-field input:focus {
-            border-bottom-color: #4a00e0;
-        }
-
-        form input[type="submit"] {
-            margin-top: 1rem;
-            padding: 0.5rem;
-            width: 100%;
-            background: linear-gradient(to right, #4776E6, #8e54e9);
-            border: none;
-            border-radius: 4px;
-            color: white;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        form input[type="submit"]:hover {
-            background: linear-gradient(to left, #4776E6, #8e54e9);
-        }
-
-        .footer {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 1rem;
-        }
-
-        .footer span {
-            margin-bottom: 0.5rem;
-            color: rgba(0, 0, 0, 0.6);
-        }
-
-        .back-button {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            background-color: transparent;
-            border: none;
-            font-size: 1.2rem;
-            color: #4a00e0;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .back-button:hover {
-            color: #8e2de2;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <button class="back-button" onclick="window.location.href='index.html'">&#8592; Back</button>
-    <main class="container">
-        <h1>Sign in</h1>
-        <form id="signin-form">
-            <div class="input-field">
-                <input type="text" name="username" id="username" placeholder="Enter Your Username" required>
-            </div>
-            <div class="input-field">
-                <input type="password" name="password" id="password" placeholder="Enter Your Password" required>
-            </div>
-            <input type="submit" value="Sign in">
-        </form>
-        <div class="footer">
-            <span>OR</span>
-            <div id="google-signin-button"></div> <!-- Container for the Google Sign-In button -->
-        </div>
-    </main>
+  <div class="form-container">
+     
+<button id="back" onclick="window.location.href='#'">&#8592; Back</button>
+
+    <h1>Sign in</h1>
+    <form id="sign-in-form">
+       <input type="text" id="sign-in-name" placeholder="Full Name" required />
+       <div class="underline"></div>
+       <input type="txt" id="sign-in-username" placeholder="Username" required />
+       <div class="underline"></div>
+      <input type="email" id="sign-in-email" placeholder="Email" required />
+      <div class="underline"></div>
+      <input type="password" id="sign-in-password" placeholder="Password" required />
+      <div class="underline"></div>
+      <p><a href="/forgot-password.html" id="forgot-password">Forgot Password?</a></p>
+
+      <button type="submit" id="submit">Sign Up</button>
+    </form>
+    <p>Already have an account? <a href="login.html">Login here</a></p>
+    <div class="or">or</div>
+    <div id="google-signin-button"></div>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+
+  <script type="module">
+  // Import Firebase modules
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.9.0/firebase-app.js';
+  import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js';
+
+  // Firebase config
+  const firebaseConfig = {
+apiKey: "AIzaSyAtAsCAld8L6Gn96mkDYXQZSMqQyf0TYxI",
+   authDomain: "simple-login-3f73a.firebaseapp.com",
+   projectId: "simple-login-3f73a",
+   storageBucket: "simple-login-3f73a.firebasestorage.app",
+   messagingSenderId: "622220968094",
+   appId: "1:622220968094:web:c219e77b41b4222555fb8f",
+   measurementId: "G-5LMTNYDPSB"
+};
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  const signInForm = document.getElementById('sign-in-form');
+  const emailInput = document.getElementById('sign-in-email');
+  const passwordInput = document.getElementById('sign-in-password');
+
+  signInForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById('sign-in-name').value;
+  const email = emailInput.value;
+  const password = passwordInput.value;
+
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    await sendEmailVerification(userCredential.user);
+
+    alert('Verification email sent!');
+    window.location.href = 'login.html';  // Redirect to login page
+  } catch (error) {
+    let errorMessage = 'An error occurred. Please try again.';
+
+    // Handle specific error codes
+    switch (error.code) {
+      case 'auth/email-already-in-use':
+        errorMessage = 'The email address is already in use. Please use a different email or log in.';
+        break;
+      case 'auth/invalid-email':
+        errorMessage = 'The email address is not valid. Please enter a valid email address.';
+        break;
+      case 'auth/weak-password':
+        errorMessage = 'The password is too weak. Please enter a stronger password.';
+        break;
+      default:
+        errorMessage = 'Something went wrong. Please try again later.';
+    }
+
+    alert(errorMessage);
+  }
+});
+    // Google Sign-In
+    function handleCredentialResponse(response) {
+  const userObject = jwt_decode(response.credential); // Decode JWT
+  localStorage.setItem('user', JSON.stringify(userObject)); // Save user data locally
+  alert('Google Sign-In successful!');
+  window.location.href = 'Gprofile.html'; // Redirect to profile page
+}
+
+// Initialize Google Sign-In
+window.onload = function () {
+  google.accounts.id.initialize({
+    client_id: "390800348887-a3nr0ugpilk4ajouog0iuliqth7b0vj9.apps.googleusercontent.com",
+    callback: handleCredentialResponse,
+  });
+  google.accounts.id.renderButton(
+    document.getElementById("google-signin-button"), 
+    { theme: "outline", size: "large" }
+  );
+};
+
+</script>
+
 </body>
 </html>
