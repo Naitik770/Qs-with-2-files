@@ -8,15 +8,12 @@
 </head>
 <body>
   <div class="form-container">
-     
-<button id="back" onclick="window.location.href='#'">&#8592; Back</button>
+    <button id="back" onclick="window.location.href='#'">&#8592; Back</button>
 
     <h1>Sign in</h1>
     <form id="sign-in-form">
-       <input type="text" id="sign-in-name" placeholder="Full Name" required />
-       <div class="underline"></div>
-       <input type="txt" id="sign-in-username" placeholder="Username" required />
-       <div class="underline"></div>
+      <input type="text" id="sign-in-name" placeholder="Full Name" required />
+      <div class="underline"></div>
       <input type="email" id="sign-in-email" placeholder="Email" required />
       <div class="underline"></div>
       <input type="password" id="sign-in-password" placeholder="Password" required />
@@ -41,71 +38,62 @@
          data-logo_alignment="left">
     </div>
   </div>
- <script type="module">
-  import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.9.0/firebase-app.js';
-  import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js';
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyAtAsCAld8L6Gn96mkDYXQZSMqQyf0TYxI",
-    authDomain: "simple-login-3f73a.firebaseapp.com",
-    projectId: "simple-login-3f73a",
-    storageBucket: "simple-login-3f73a.firebasestorage.app",
-    messagingSenderId: "622220968094",
-    appId: "1:622220968094:web:c219e77b41b4222555fb8f",
-    measurementId: "G-5LMTNYDPSB"
-  };
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.9.0/firebase-app.js';
+    import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js';
 
-  const signInForm = document.getElementById('sign-in-form');
-  const emailInput = document.getElementById('sign-in-email');
-  const passwordInput = document.getElementById('sign-in-password');
+    const firebaseConfig = {
+      apiKey: "AIzaSyAtAsCAld8L6Gn96mkDYXQZSMqQyf0TYxI",
+      authDomain: "simple-login-3f73a.firebaseapp.com",
+      projectId: "simple-login-3f73a",
+      storageBucket: "simple-login-3f73a.appspot.com",
+      messagingSenderId: "622220968094",
+      appId: "1:622220968094:web:c219e77b41b4222555fb8f",
+      measurementId: "G-5LMTNYDPSB"
+    };
 
-  signInForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-    const name = document.getElementById('sign-in-name').value;
-    const email = emailInput.value;
-    const password = passwordInput.value;
+    document.getElementById('sign-in-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      await sendEmailVerification(userCredential.user);
+      const email = document.getElementById('sign-in-email').value;
+      const password = document.getElementById('sign-in-password').value;
 
-      alert('Verification email sent!');
-      window.location.href = 'login.html';
-    } catch (error) {
-      let errorMessage = 'An error occurred. Please try again.';
-      switch (error.code) {
-        case 'auth/email-already-in-use':
-          errorMessage = 'The email address is already in use. Please log in.';
-          break;
-        case 'auth/invalid-email':
-          errorMessage = 'The email address is invalid.';
-          break;
-        case 'auth/weak-password':
-          errorMessage = 'The password is too weak.';
-          break;
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        await sendEmailVerification(userCredential.user);
+        alert('Verification email sent!');
+        window.location.href = 'login.html';  
+      } catch (error) {
+        alert('An error occurred. Please try again.');
       }
-      alert(errorMessage);
-    }
-  });
+    });
 
-  // Handle Google Sign-In
-  window.handleGoogleSignIn = (response) => {
-    const userData = jwt_decode(response.credential);
-    localStorage.setItem('user', JSON.stringify({
-      name: userData.name,
-      email: userData.email,
-      picture: userData.picture
-    }));
-    window.location.href = 'Gprofile.html'; // Redirect to Gprofile.html
-  };
-</script>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-<script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    window.handleGoogleSignIn = function(response) {
+      const idToken = response.credential;
+      const base64Url = idToken.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      );
+      
+      const googleUserData = JSON.parse(jsonPayload);
+      localStorage.setItem('user', JSON.stringify({
+        name: googleUserData.name,
+        email: googleUserData.email,
+        picture: googleUserData.picture
+      }));
+
+      window.location.href = 'Gprofile.html';
+    };
+  </script>
 </body>
 </html>
-   
-   
