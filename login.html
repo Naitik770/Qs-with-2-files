@@ -18,8 +18,21 @@
     </form>
     <p>Don't have an account? <a href="sign-in.html">Sign up here</a></p>
     <div class="or">or</div>
-    <div id="google-signin-button"></div> <!-- Container for Google Sign-In -->
+        <div id="g_id_onload"
+         data-client_id="390800348887-a3nr0ugpilk4ajouog0iuliqth7b0vj9.apps.googleusercontent.com"
+         data-callback="handleGoogleSignIn"
+         data-auto_prompt="false">
+    </div>
+    <div class="g_id_signin"
+         data-type="standard"
+         data-shape="rectangular"
+         data-theme="outline"
+         data-text="sign_in_with"
+         data-size="large"
+         data-logo_alignment="left">
+    </div>
   </div>
+
 
   <!-- Include Google Identity Services -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -92,27 +105,14 @@
         alert(errorMessage);
       }
     });
-
-    // Google Sign-In
-    function handleCredentialResponse(response) {
-  const userObject = jwt_decode(response.credential); // Decode JWT
-  localStorage.setItem('user', JSON.stringify(userObject)); // Save user data locally
-  alert('Google Sign-In successful!');
-  window.location.href = 'Gprofile.html'; // Redirect to profile page
-}
-
-// Initialize Google Sign-In
-window.onload = function () {
-  google.accounts.id.initialize({
-    client_id: "390800348887-a3nr0ugpilk4ajouog0iuliqth7b0vj9.apps.googleusercontent.com",
-    callback: handleCredentialResponse,
-  });
-  google.accounts.id.renderButton(
-    document.getElementById("google-signin-button"), 
-    { theme: "outline", size: "large" }
-  );
-};
-
-  </script>
+    
+        // Callback function to handle Google Sign-In
+        function handleGoogleSignIn(response) {
+           console.log('Google ID Token:', response.credential);
+           localStorage.setItem('user', JSON.stringify(userObject));
+           alert('Google Sign-In successful!');
+           window.location.href = 'Gprofile.html'; // Redirect to Gprofile.html
+        }
+</script>
 </body>
 </html>
