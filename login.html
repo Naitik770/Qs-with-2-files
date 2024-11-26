@@ -106,18 +106,30 @@
     });
 
     // Google Sign-In Callback
-    window.handleGoogleSignIn = function(response) {
-      const idToken = response.credential; // Get the ID token
-      console.log('Google ID Token:', idToken);
+    window.handleGoogleSignIn = function (response) {
+      const idToken = response.credential;
 
-      // For demonstration, verify the token or handle it on your server if necessary
-      if (idToken) {
-        localStorage.setItem('google-id-token', idToken);
-        console.log('Redirecting to Gprofile.html...');
-        window.location.href = 'Gprofile.html'; // Redirect to Google profile page
-      } else {
-        alert('Google Sign-In failed. Please try again.');
-      }
+      // Decode Google ID token (JWT) to extract profile information
+      const base64Url = idToken.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      );
+
+      const googleUserData = JSON.parse(jsonPayload);
+
+      // Save user data to localStorage
+      localStorage.setItem('user', JSON.stringify({
+        name: googleUserData.name,
+        email: googleUserData.email,
+        picture: googleUserData.picture
+      }));
+
+      // Redirect to Gprofile.html
+      window.location.href = 'Gprofile.html';
     };
   </script>
 </body>
