@@ -8,7 +8,7 @@
 </head>
 <body>
   <div class="form-container">
-    <button id="loginback" onclick="window.location.href='#'">&#8592; Back</button>
+    <button id="loginback" onclick="window.location.href='sign-in.html'">&#8592; Back</button>
     <h1>Login</h1>
     <form id="login-form">
       <input type="email" id="login-email" placeholder="Email" required />
@@ -18,10 +18,10 @@
     </form>
     <p>Don't have an account? <a href="sign-in.html">Sign up here</a></p>
     <div class="or">or</div>
-        <div id="g_id_onload"
+    <div id="g_id_onload"
          data-client_id="390800348887-a3nr0ugpilk4ajouog0iuliqth7b0vj9.apps.googleusercontent.com"
-         data-callback="handleGoogleSignIn">
-         
+         data-callback="handleGoogleSignIn"
+         data-auto_prompt="false">
     </div>
     <div class="g_id_signin"
          data-type="standard"
@@ -33,94 +33,92 @@
     </div>
   </div>
 
-
   <!-- Include Google Identity Services -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-<script type="module">
-  // Import Firebase modules
-  import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.9.0/firebase-app.js';
-  import { getAuth, signInWithEmailAndPassword, sendEmailVerification, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js';
+  <script type="module">
+    // Import Firebase modules
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.9.0/firebase-app.js';
+    import { getAuth, signInWithEmailAndPassword, sendEmailVerification, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js';
 
-  // Firebase config
-  const firebaseConfig = {
-    apiKey: "AIzaSyAtAsCAld8L6Gn96mkDYXQZSMqQyf0TYxI",
-    authDomain: "simple-login-3f73a.firebaseapp.com",
-    projectId: "simple-login-3f73a",
-    storageBucket: "simple-login-3f73a.firebasestorage.app",
-    messagingSenderId: "622220968094",
-    appId: "1:622220968094:web:c219e77b41b4222555fb8f",
-    measurementId: "G-5LMTNYDPSB"
-  };
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAtAsCAld8L6Gn96mkDYXQZSMqQyf0TYxI",
+      authDomain: "simple-login-3f73a.firebaseapp.com",
+      projectId: "simple-login-3f73a",
+      storageBucket: "simple-login-3f73a.appspot.com",
+      messagingSenderId: "622220968094",
+      appId: "1:622220968094:web:c219e77b41b4222555fb8f",
+      measurementId: "G-5LMTNYDPSB"
+    };
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-  // Email/Password Login
-  const loginForm = document.getElementById('login-form');
-  const loginEmailInput = document.getElementById('login-email');
-  const loginPasswordInput = document.getElementById('login-password');
+    // Email/Password Login
+    const loginForm = document.getElementById('login-form');
+    const loginEmailInput = document.getElementById('login-email');
+    const loginPasswordInput = document.getElementById('login-password');
 
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = loginEmailInput.value;
-    const password = loginPasswordInput.value;
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = loginEmailInput.value;
+      const password = loginPasswordInput.value;
 
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
 
-      onAuthStateChanged(auth, (user) => {
-        if (user && user.emailVerified) {
-          alert('Login successful!');
-          window.location.href = 'profile.html';
-        } else if (user) {
-          alert('Email not verified. Sending verification email...');
-          sendEmailVerification(user).then(() => {
-            alert('Verification email sent. Check your inbox.');
-          }).catch((error) => {
-            alert('Failed to send verification email. Please try again.');
-          });
+        onAuthStateChanged(auth, (user) => {
+          if (user && user.emailVerified) {
+            alert('Login successful!');
+            window.location.href = 'profile.html';
+          } else if (user) {
+            alert('Email not verified. Sending verification email...');
+            sendEmailVerification(user).then(() => {
+              alert('Verification email sent. Check your inbox.');
+            }).catch((error) => {
+              alert('Failed to send verification email. Please try again.');
+            });
+          }
+        });
+      } catch (error) {
+        let errorMessage;
+        switch (error.code) {
+          case 'auth/user-not-found':
+            errorMessage = 'No user found with this email.';
+            break;
+          case 'auth/wrong-password':
+            errorMessage = 'Incorrect password.';
+            break;
+          case 'auth/invalid-email':
+            errorMessage = 'Invalid email format.';
+            break;
+          case 'auth/user-disabled':
+            errorMessage = 'This account is disabled.';
+            break;
+          default:
+            errorMessage = 'Login failed. Try again.';
         }
-      });
-    } catch (error) {
-      let errorMessage;
-      switch (error.code) {
-        case 'auth/user-not-found':
-          errorMessage = 'No user found with this email.';
-          break;
-        case 'auth/wrong-password':
-          errorMessage = 'Incorrect password.';
-          break;
-        case 'auth/invalid-email':
-          errorMessage = 'Invalid email format.';
-          break;
-        case 'auth/user-disabled':
-          errorMessage = 'This account is disabled.';
-          break;
-        default:
-          errorMessage = 'Login failed. Try again.';
+        alert(errorMessage);
       }
-      alert(errorMessage);
-    }
-  });
+    });
 
-  // Google Sign-In Callback
-  function handleGoogleSignIn(response) {
-    const idToken = response.credential; // Get the ID token
-    console.log('Google ID Token:', idToken);
+    // Google Sign-In Callback
+    window.handleGoogleSignIn = function(response) {
+      const idToken = response.credential; // Get the ID token
+      console.log('Google ID Token:', idToken);
 
-    // Here, you can verify the token on your server or use it with Firebase Auth
-    // For demonstration, storing the token locally and redirecting
-    localStorage.setItem('google-id-token', idToken);
-    alert('Google Sign-In successful!');
-    window.location.href = 'Gprofile.html'; // Redirect to Google profile page
-  }
-
-  // Attach the callback to handle Google Sign-In responses
-  window.handleGoogleSignIn = handleGoogleSignIn;
-</script>
-
+      // For demonstration, verify the token or handle it on your server if necessary
+      if (idToken) {
+        localStorage.setItem('google-id-token', idToken);
+        console.log('Redirecting to Gprofile.html...');
+        window.location.href = 'Gprofile.html'; // Redirect to Google profile page
+      } else {
+        alert('Google Sign-In failed. Please try again.');
+      }
+    };
+  </script>
 </body>
 </html>
