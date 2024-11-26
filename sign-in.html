@@ -41,24 +41,20 @@
          data-logo_alignment="left">
     </div>
   </div>
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-
-  <script type="module">
-  // Import Firebase modules
+ <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.9.0/firebase-app.js';
   import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js';
 
-  // Firebase config
   const firebaseConfig = {
-apiKey: "AIzaSyAtAsCAld8L6Gn96mkDYXQZSMqQyf0TYxI",
-   authDomain: "simple-login-3f73a.firebaseapp.com",
-   projectId: "simple-login-3f73a",
-   storageBucket: "simple-login-3f73a.firebasestorage.app",
-   messagingSenderId: "622220968094",
-   appId: "1:622220968094:web:c219e77b41b4222555fb8f",
-   measurementId: "G-5LMTNYDPSB"
-};
-  // Initialize Firebase
+    apiKey: "AIzaSyAtAsCAld8L6Gn96mkDYXQZSMqQyf0TYxI",
+    authDomain: "simple-login-3f73a.firebaseapp.com",
+    projectId: "simple-login-3f73a",
+    storageBucket: "simple-login-3f73a.firebasestorage.app",
+    messagingSenderId: "622220968094",
+    appId: "1:622220968094:web:c219e77b41b4222555fb8f",
+    measurementId: "G-5LMTNYDPSB"
+  };
+
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
@@ -67,42 +63,48 @@ apiKey: "AIzaSyAtAsCAld8L6Gn96mkDYXQZSMqQyf0TYxI",
   const passwordInput = document.getElementById('sign-in-password');
 
   signInForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const name = document.getElementById('sign-in-name').value;
-  const email = emailInput.value;
-  const password = passwordInput.value;
+    const name = document.getElementById('sign-in-name').value;
+    const email = emailInput.value;
+    const password = passwordInput.value;
 
-  try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    await sendEmailVerification(userCredential.user);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      await sendEmailVerification(userCredential.user);
 
-    alert('Verification email sent!');
-    window.location.href = 'login.html';  // Redirect to login page
-  } catch (error) {
-    let errorMessage = 'An error occurred. Please try again.';
-
-    // Handle specific error codes
-    switch (error.code) {
-      case 'auth/email-already-in-use':
-        errorMessage = 'The email address is already in use. Please use a different email or log in.';
-        break;
-      case 'auth/invalid-email':
-        errorMessage = 'The email address is not valid. Please enter a valid email address.';
-        break;
-      case 'auth/weak-password':
-        errorMessage = 'The password is too weak. Please enter a stronger password.';
-        break;
-      default:
-        errorMessage = 'Something went wrong. Please try again later.';
+      alert('Verification email sent!');
+      window.location.href = 'login.html';
+    } catch (error) {
+      let errorMessage = 'An error occurred. Please try again.';
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          errorMessage = 'The email address is already in use. Please log in.';
+          break;
+        case 'auth/invalid-email':
+          errorMessage = 'The email address is invalid.';
+          break;
+        case 'auth/weak-password':
+          errorMessage = 'The password is too weak.';
+          break;
+      }
+      alert(errorMessage);
     }
+  });
 
-    alert(errorMessage);
-  }
-});
-
-
+  // Handle Google Sign-In
+  window.handleGoogleSignIn = (response) => {
+    const userData = jwt_decode(response.credential);
+    localStorage.setItem('user', JSON.stringify({
+      name: userData.name,
+      email: userData.email,
+      picture: userData.picture
+    }));
+    window.location.href = 'Gprofile.html'; // Redirect to Gprofile.html
+  };
 </script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
 </body>
 </html>
    
