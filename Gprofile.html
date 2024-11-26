@@ -6,7 +6,6 @@
   <title>Google Profile</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    /* Your existing styles */
     body {
       font-family: Arial, sans-serif;
       background-color: #fff;
@@ -50,16 +49,6 @@
       background-color: #e04343;
     }
 
-    .btn-back {
-      margin-bottom: 35px;
-      background-color: transparent;
-      color: #4285F4;
-      border: none;
-      margin-right: 200px;
-      font-size: 22px;
-      cursor: pointer;
-    }
-
     .profile-picture {
       display: flex;
       flex-direction: column;
@@ -75,69 +64,40 @@
       object-fit: cover;
       margin-bottom: 10px;
     }
-
-    .profile-picture input {
-      display: none;
-    }
-
-    .upload-btn {
-      background-color: #ff4d4d;
-      color: #fff;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .upload-btn:hover {
-      background-color: #45a049;
-    }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <button class="btn-back" onclick="window.location.href='index.html'" id="back-btn">&#8592; Back</button>
     <h1>Google Profile</h1>
-    <!-- Profile Picture -->
     <div class="profile-picture">
       <img id="profile-pic" src="" alt="Profile Picture">
     </div>
-
-    <!-- User Information -->
     <div class="profile-info">
       <p><strong>Name:</strong> <span id="user-name"></span></p>
       <p><strong>Email:</strong> <span id="user-email"></span></p>
     </div>
-
-    <!-- Log Out Button -->
     <button class="btn-logout" id="logoutbtn">Log Out</button>
   </div>
 
-<script>
-  
-  // Get the Google user data from localStorage
-  const googleUserData = JSON.parse(localStorage.getItem('user'));
+  <script>
+    // Retrieve the Google user data from localStorage
+    const googleUserData = JSON.parse(localStorage.getItem('user'));
 
-  if (googleUserData) {
-    // Display the Google user's profile picture, name, and email
-    document.getElementById('profile-pic').src = googleUserData.picture;
-    document.getElementById('user-name').textContent = googleUserData.name;
-    document.getElementById('user-email').textContent = googleUserData.email;
-  } 
+    if (googleUserData) {
+      document.getElementById('profile-pic').src = googleUserData.picture;
+      document.getElementById('user-name').textContent = googleUserData.name;
+      document.getElementById('user-email').textContent = googleUserData.email;
+    } else {
+      alert('No user information found. Please log in again.');
+      window.location.href = 'login.html';
+    }
 
-  // Log out functionality
-  const logoutbtn = document.getElementById('logoutbtn');
-  logoutbtn.addEventListener('click', () => {
-    signOut(auth).then(() => {
-      localStorage.removeItem('user'); // Remove Google user data from localStorage
-      window.location.href = 'index.html'; // Redirect to the home page after logout
-    }).catch((error) => {
-      console.error("Error signing out:", error);
+    // Log out functionality
+    document.getElementById('logoutbtn').addEventListener('click', () => {
+      localStorage.removeItem('user');
+      window.location.href = 'index.html';
     });
-  });
-</script>
-
+  </script>
 </body>
 </html>
