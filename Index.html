@@ -153,15 +153,43 @@
             window.location.href = 'profile.html'; // Redirect to profile page
         }
 
-</script>
+    </script>
 
-<script>
+    <script>
         function search() {
            const query = document.getElementById('searchQuery').value;
            if (query) {
               window.location.href = `results.html?q=${encodeURIComponent(query)}`;
            }
         }
+
+        // Function to load profile picture on index.html from localStorage
+        function loadProfilePicture() {
+            const profilePicture = document.getElementById('profile-picture');
+            const signInButton = document.getElementById('signInButton');
+            
+            // Check if the user is logged in by checking localStorage
+            const googleUserData = JSON.parse(localStorage.getItem('user'));
+            
+            if (googleUserData) {
+                // Hide the sign-in button and show the profile picture
+                signInButton.style.display = 'none'; 
+                profilePicture.style.display = 'inline';
+                
+                // Set the profile picture source and link it to the profile page
+                profilePicture.src = googleUserData.picture; // Default profile pic if not available
+                profilePicture.onclick = function() {
+                    window.location.href = 'Gprofile.html'; // Redirect to profile page
+                };
+            } else {
+                // Show the sign-in button if no user is logged in
+                signInButton.style.display = 'inline';
+                profilePicture.style.display = 'none';
+            }
+        }
+
+        // Call the function when the page is loaded
+        window.onload = loadProfilePicture;
     </script>
 </body>
 </html>
