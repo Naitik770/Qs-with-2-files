@@ -80,7 +80,7 @@
 <body>
 
   <div class="container">
-    <button class="btn-back" onclick="window.location.href='index.html'" id="back-btn">&#8592; Back</button>
+    <button class="btn-back" id="back-btn">&#8592; Back</button>
     <h1>Google Profile</h1>
     <div class="profile-picture">
       <img id="profile-pic" src="" alt="Profile Picture">
@@ -92,24 +92,34 @@
     <button class="btn-logout" id="logoutbtn">Log Out</button>
   </div>
 
-  <script>
+<script>
     // Retrieve the Google user data from localStorage
-    const googleUserData = JSON.parse(localStorage.getItem('user'));
+    const googleUserData = JSON.parse(localStorage.getItem('google-user'));
 
     if (googleUserData) {
-      document.getElementById('profile-pic').src = googleUserData.picture;
-      document.getElementById('user-name').textContent = googleUserData.name;
-      document.getElementById('user-email').textContent = googleUserData.email;
+        document.getElementById('profile-pic').src = googleUserData.picture;
+        document.getElementById('user-name').textContent = googleUserData.name;
+        document.getElementById('user-email').textContent = googleUserData.email;
     } else {
-      alert('No user information found. Please log in again.');
-      window.location.href = 'login.html';
+        alert('No user information found. Please log in again.');
+        window.location.href = 'login.html';
     }
+
+    // Save Google profile picture in localStorage on Back button click
+    document.getElementById('back-btn').addEventListener('click', () => {
+        if (googleUserData && googleUserData.picture) {
+            localStorage.setItem('profile-pic', googleUserData.picture); // Save profile picture
+        }
+        window.location.href = 'index.html'; // Redirect to index.html
+    });
 
     // Log out functionality
     document.getElementById('logoutbtn').addEventListener('click', () => {
-      localStorage.removeItem('user');
-      window.location.href = 'index.html';
+        localStorage.removeItem('google-user');
+        localStorage.removeItem('profile-pic'); // Clear profile pic from storage
+        window.location.href = 'index.html';
     });
-  </script>
+</script>
+
 </body>
 </html>
