@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google-Like Homepage</title>
+    <title>Query Search</title>
     <style>
         /* Your existing styles */
         body {
@@ -117,43 +117,61 @@
     <button class="bn">I'm Feeling Lucky</button>
 
     <script type="module">
-        // Firebase Initialization and Auth check
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.9.0/firebase-app.js';
-        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js';
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAtAsCAld8L6Gn96mkDYXQZSMqQyf0TYxI",
-            authDomain: "simple-login-3f73a.firebaseapp.com",
-            projectId: "simple-login-3f73a",
-            storageBucket: "simple-login-3f73a.firebasestorage.app",
-            messagingSenderId: "622220968094",
-            appId: "1:622220968094:web:c219e77b41b4222555fb8f",
-            measurementId: "G-5LMTNYDPSB"
-        };
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+    // Firebase Initialization and Auth check
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.9.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js';
 
-        const signInButton = document.getElementById('signInButton');
-        const profilePicture = document.getElementById('profile-picture');
+    const firebaseConfig = {
+        apiKey: "AIzaSyAtAsCAld8L6Gn96mkDYXQZSMqQyf0TYxI",
+        authDomain: "simple-login-3f73a.firebaseapp.com",
+        projectId: "simple-login-3f73a",
+        storageBucket: "simple-login-3f73a.firebasestorage.app",
+        messagingSenderId: "622220968094",
+        appId: "1:622220968094:web:c219e77b41b4222555fb8f",
+        measurementId: "G-5LMTNYDPSB"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-        // Check auth state to update UI accordingly
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                signInButton.style.display = 'none'; // Hide sign in button
-                profilePicture.style.display = 'inline'; // Show profile picture
-                profilePicture.src = localStorage.getItem('profile-pic') || 'https://i.postimg.cc/Fsxcnzf5/727399.png'; // Load profile pic
+    const signInButton = document.getElementById('signInButton');
+    const profilePicture = document.getElementById('profile-picture');
+
+    // Check auth state to update UI accordingly
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            signInButton.style.display = 'none'; // Hide sign in button
+            profilePicture.style.display = 'inline'; // Show profile picture
+            if (localStorage.getItem('google-user')) {
+                // Google sign-in profile picture
+                const googleUser = JSON.parse(localStorage.getItem('google-user'));
+                profilePicture.src = googleUser.picture; // Set Google profile picture
+                profilePicture.onclick = function() {
+                    window.location.href = 'gprofile.html'; // Redirect to Google profile page
+                };
             } else {
-                signInButton.style.display = 'inline'; // Show sign in button if not logged in
-                profilePicture.style.display = 'none'; // Hide profile picture
+// Firebase sign-in profile picture
+if (localStorage.getItem('profile-pic')) {
+    // Use the profile picture from localStorage if available
+    profilePicture.src = localStorage.getItem('profile-pic');
+    profilePicture.onclick = function() {
+        window.location.href = 'profile.html'; // Redirect to Firebase profile page
+    };
+} else {
+    // Fallback to Firebase photoURL if no localStorage profile-pic is found
+    profilePicture.src = user.photoURL || 'https://i.postimg.cc/Fsxcnzf5/727399.png'; // Default Firebase profile picture
+    profilePicture.onclick = function() {
+        window.location.href = 'profile.html'; // Redirect to Firebase profile page
+    };
+}
+
             }
-        });
-
-        // Go to profile page
-        function goToProfile() {
-            window.location.href = 'profile.html'; // Redirect to profile page
+        } else {
+            signInButton.style.display = 'inline'; // Show sign in button if not logged in
+            profilePicture.style.display = 'none'; // Hide profile picture
         }
-
-    </script>
+    });
+</script>
 
     <script>
         function search() {
@@ -163,34 +181,8 @@
            }
         }
 
-        // Function to load profile picture on index.html from localStorage
-        function loadProfilePicture() {
-            const profilePicture = document.getElementById('profile-picture');
-            const signInButton = document.getElementById('signInButton');
-            
-            // Check if the user is logged in by checking localStorage
-            const googleUserData = JSON.parse(localStorage.getItem('user'));
-            
-            if (googleUserData) {
-                // Hide the sign-in button and show the profile picture
-                signInButton.style.display = 'none'; 
-                profilePicture.style.display = 'inline';
-                
-                // Set the profile picture source and link it to the profile page
-                profilePicture.src = googleUserData.picture; // Default profile pic if not available
-                profilePicture.onclick = function() {
-                    window.location.href = 'Gprofile.html'; // Redirect to profile page
-                };
-            } else {
-                // Show the sign-in button if no user is logged in
-                signInButton.style.display = 'inline';
-                profilePicture.style.display = 'none';
-            }
-        
-
-        // Call the function when the page is loaded
-        window.onload = loadProfilePicture;
-        }
     </script>
 </body>
 </html>
+
+
