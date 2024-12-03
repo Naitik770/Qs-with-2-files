@@ -5,6 +5,51 @@
   <title>Login</title>
   <link rel="stylesheet" href="styles.css">
 </head>
+<style>
+
+#loginback {
+  background: transparent;
+  border: none;
+  position: fixed;
+  color: #000dff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-right: 240px;
+  margin-bottom: 450px;
+  transition: color 0.3s ease;
+}
+
+
+
+/* Google Sign-In Section */
+.g_id_signin {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  
+}
+
+.g_id_signin:hover {
+  border-color: #000dff;
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Google Button Logo Alignment */
+.g_id_signin img,
+.g_id_signin span {
+  vertical-align: middle;
+  font-size: 1rem;
+}
+
+
+
+
+
+
+</style>
 <body>
   <div class="form-container">
     <button id="loginback" onclick="window.location.href='#'">&#8592; Back</button>
@@ -19,10 +64,10 @@
     <div class="or">----or----</div>
     <!-- Google Sign-In button -->
     <div id="g_id_onload"
-     data-client_id="390800348887-a3nr0ugpilk4ajouog0iuliqth7b0vj9.apps.googleusercontent.com"
-     data-callback="handleGoogleSignIn">
-</div>
-
+         data-client_id="390800348887-a3nr0ugpilk4ajouog0iuliqth7b0vj9.apps.googleusercontent.com"
+         data-login_uri="https://searchspace.netlify.app/Googleprofile.html"
+         data-callback="handleGoogleSignIn">
+    </div>
     <div class="g_id_signin"
          data-type="standard"
          data-shape="rectangular"
@@ -99,27 +144,17 @@
     }
   });
 
+  // Google Sign-In callback
   window.handleGoogleSignIn = (response) => {
-  try {
-    const googleUserData = jwt_decode(response.credential); // Decode the JWT
-    console.log('Google User Data:', googleUserData); // Log for debugging
-    
-    // Save data or perform additional checks
-    localStorage.setItem('googleUserData', JSON.stringify(googleUserData));
-
-    // Redirect to the desired page
-    window.location.href = 'Googleprofile.html';
-  } catch (error) {
-    console.error('Google Sign-In Error:', error);
-    alert('Google Sign-In failed. Please try again.');
-  }
+  const googleUserData = jwt_decode(response.credential); // Use jwt-decode library
+  localStorage.setItem('googleUserData', JSON.stringify(googleUserData));
+  window.location.href = 'Googleprofile.html';
 };
-
 
 </script>
 
 <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
 
 </body>
 </html>
