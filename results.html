@@ -153,6 +153,78 @@
             font-weight: bold;
             text-align: center;
         }
+        
+       .tab-container-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.tab-container {
+    display: inline-flex;
+    width: auto;
+}
+.tab {
+    position: relative; /* Required for the underline to position relative to the tab */
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #999;
+    flex: none; /* Prevent shrinking in the scrollable container */
+    background-color: #fff;
+    outline: none;
+    border: none;
+    text-align: center;
+}
+
+.tab::after {
+    content: '';
+    position: absolute;
+    bottom: 0; /* Adjusted to align properly with the tab */
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+}
+
+.tab.active {
+    color: black;
+}
+
+.tab.active::after {
+    background-color: black; /* Makes the underline visible for the active tab */
+}
+
+.music-result {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   margin-bottom: 20px;
+   padding: 10px;
+   background-color: #fff;
+   border-radius: 8px;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+   text-align: center;
+}
+
+.music-result img {
+   border-radius: 8px;
+   margin-bottom: 10px;
+}
+
+.music-result a {
+   color: #1DB954;
+   /* Spotify green */
+   text-decoration: none;
+   font-weight: bold;
+}
+
+.music-result a:hover {
+   text-decoration: underline;
+}
 
     </style>
 </head>
@@ -164,12 +236,16 @@
             <input type="text" id="searchBox" placeholder="">
         </div>
     </div>
+<div class="tab-container-wrapper">
     <div class="tab-container">
         <button type="button" id="web-search" class="tab active" data-type="web">WEB</button>
         <button type="button" id="image-search" class="tab" data-type="image">IMAGE</button>
         <button type="button" id="books-search" class="tab" data-type="books">BOOKS</button>
+        <button type="button" id="music-search" class="tab" data-type="music">MUSIC</button>
         <button type="button" id="video-search" class="tab" data-type="video">VIDEO</button>
     </div>
+</div>
+
     <div class="results-info" id="resultsInfo">Loading results...</div>
     <div id="resultsContainer"></div>
 
@@ -308,7 +384,91 @@ document.querySelectorAll('.tab').forEach(tab => {
     });
 });
 
+
+document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', function () {
+        const type = this.getAttribute('data-type');
+        const query = document.getElementById('searchBox').value;
+        if (query) {
+            if (type === 'music') {
+                fetchSpotifyResults(query);
+            } else {
+                fetchResults(query, type);
+            }
+        }
+
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+    });
+});
+
+
+const spotifyCredentials = {
+    clientId: 'e4264538618c468194feb0a99d5d442e',  // Replace with your Spotify Client ID
+    clientSecret: '8be603f3853d45328ea382b765d6bc0b' // Replace with your Spotify Client Secret
+};
+
+let spotifyAccessToken = null;
+
+// Function to get Spotify access token
+async function fetchSpotifyToken() {
+    const tokenUrl = 'https://accounts.spotify.com/api/token';
+    const authString = btoa(`${spotifyCredentials.clientId}:${spotifyCredentials.clientSecret}`);
+
+    const response = await fetch(tokenUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': `Basic ${authString}`
+        },
+        body: 'grant_type=client_credentials'
+    });
+
+    const data = await response.json();
+    spotifyAccessToken = data.access_token;
+}
+
+// Fetch music results from Spotify API
+async function fetchSpotifyResults(query) {
+    if (!spotifyAccessToken) {
+        await fetchSpotifyToken();
+    }
+
+    const searchUrl = `https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track&limit=10`;
+
+    const response = await fetch(searchUrl, {
+        headers: {
+            'Authorization': `Bearer ${spotifyAccessToken}`
+        }
+    });
+
+    const data = await response.json();
+    displaySpotifyResults(data.tracks.items, query);
+}
+
+// Display Spotify results
+function displaySpotifyResults(tracks, query) {
+    const resultsContainer = document.getElementById('resultsContainer');
+    const resultsInfo = document.getElementById('resultsInfo');
+    resultsContainer.innerHTML = '';
+
+    resultsInfo.textContent = `Showing music results for "${query}"`;
+
+    tracks.forEach(track => {
+        const musicDiv = document.createElement('div');
+        musicDiv.classList.add('music-result');
+        musicDiv.innerHTML = `
+            <div>
+                <img src="${track.album.images[0]?.url || 'https://via.placeholder.com/150'}" alt="${track.name}" style="width:100px; height:100px; border-radius:8px;">
+                <p><strong>${track.name}</strong></p>
+                <p>By: ${track.artists.map(artist => artist.name).join(', ')}</p>
+                <a href="${track.external_urls.spotify}" target="_blank">Listen on Spotify</a>
+            </div>
+        `;
+        resultsContainer.appendChild(musicDiv);
+    });
+}
+
     </script>
 </body>
 </html>
-
