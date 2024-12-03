@@ -3,186 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google-Like Homepage</title>
+    <title>Search Space</title>
     <style>
-        /* Your existing styles */
         body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #ffffff;
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           justify-content: center;
+           min-height: 100vh;
+           margin: 0;
+           font-family: Arial, sans-serif;
+           background-color: #ffffff;
         }
-
+        
         .logo {
-            font-size: 51px;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #4285F4;
-            text-shadow: -3px 0 #EA4335, 3px 0 #FBBC05, 6px 0 #34A853;
+           font-size: 51px;
+           margin-bottom: 5px;
+           font-weight: bold;
+           color: #4285F4;
+           text-shadow: -3px 0 #EA4335, 3px 0 #FBBC05, 6px 0 #34A853;
         }
-
+        
         .search-container {
-            background-color: #fff;
-            padding: 5px;
-            padding-bottom: 25px;
-            width: 291px;
-            height: 15px;
-            border-radius: 1000px;
-            border: 1px solid #dfe1e5;
-            box-shadow: 0 1px 8px rgba(32, 33, 36, 0.28);
-            border-color: rgba(223, 225, 229, 0);
-            position: relative;
+           background-color: #fff;
+           padding: 5px;
+           padding-bottom: 25px;
+           width: 291px;
+           height: 15px;
+           border-radius: 1000px;
+           border: 1px solid #dfe1e5;
+           box-shadow: 0 1px 8px rgba(32, 33, 36, 0.28);
+           border-color: rgba(223, 225, 229, 0);
+           position: relative;
         }
-
+        
         .search-box {
-            position: fixed;
-            font-size: 17px;
-            height: 30px;
-            border: none;
-            width: 245px;
-            background-color: transparent;
-            margin-top: 2px;
-            outline: none;
-            margin-left: 10px;
+           position: fixed;
+           font-size: 17px;
+           height: 30px;
+           border: none;
+           width: 245px;
+           background-color: transparent;
+           margin-top: 2px;
+           outline: none;
+           margin-left: 10px;
         }
-
+        
         .buttons {
-            margin-top: 20px;
-            display: flex;
-            gap: 10px;
+           margin-top: 20px;
+           display: flex;
+           gap: 10px;
         }
-
-        .btn, .bn {
-            padding: 15px 25px;
-            font-size: 14px;
-            color: #3c4043;
-            background-color: #f8f9fa;
-            border: 1px solid #f8f9fa;
-            border-radius: 4px;
-            cursor: pointer;
-            box-shadow: 0 1px 3px rgba(60, 64, 67, 0.3);
+        
+        .btn,
+        .bn {
+           padding: 15px 25px;
+           font-size: 14px;
+           color: #3c4043;
+           background-color: #f8f9fa;
+           border: 1px solid #f8f9fa;
+           border-radius: 4px;
+           cursor: pointer;
+           box-shadow: 0 1px 3px rgba(60, 64, 67, 0.3);
         }
-
+        
         .btn:active {
-            background-color: #e8e8e8;
+           background-color: #e8e8e8;
         }
-
-        #signInButton{
-            position: relative;
-            bottom: 155px;
-            left: 105px;
-            padding: 10px 20px;
-            font-size: 14px;
-            color: #fff;
-            background-color: #4285F4;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            text-decoration: none;
+        
+        #signInButton {
+           position: relative;
+           bottom: 155px;
+           left: 105px;
+           padding: 10px 20px;
+           font-size: 14px;
+           color: #fff;
+           background-color: #4285F4;
+           border: none;
+           border-radius: 4px;
+           cursor: pointer;
+           text-decoration: none;
         }
-
+        
         #profile-picture {
-            width: 50px;
-            position: relative;
-            bottom: 155px;
-            left: 115px;
-            height: 50px;
-            border-radius: 50%;
-            cursor: pointer;
+           width: 50px;
+           position: relative;
+           bottom: 155px;
+           left: 115px;
+           height: 50px;
+           border-radius: 50%;
+           cursor: pointer;
         }
-
     </style>
 </head>
 <body>
 
     <div id="profile-section">
-        <!-- This will display user profile picture once signed in -->
         <button id="signInButton" onclick="window.location.href='sign-in.html'">Sign In</button>
-        <img id="profile-picture" src="" alt="Profile" onclick="window.location.href='profile.html'" style="display: none;">
-    </div>
+              <img id="profile-picture" src="" alt="Profile" onclick="window.location.href='profile.html'" style="display: none;">
+              </div>
 
     <div class="logo">Search space</div>
 
     <div class="search-container">
         <input type="text" class="search-box" id="searchQuery" spellcheck="true" placeholder="Type here..." required>
     </div>
+
     <div class="buttons">
         <button class="btn" onclick="search()">Query Search</button>
+        <button class="bn" onclick="alert('Feeling Lucky!')">I'm Feeling Lucky</button>
     </div>
-    <br>
-    <button class="bn">I'm Feeling Lucky</button>
 
     <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.9.0/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js';
 
-    // Firebase Initialization and Auth check
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.9.0/firebase-app.js';
-    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js';
+        const firebaseConfig = {
+            apiKey: "AIzaSyAtAsCAld8L6Gn96mkDYXQZSMqQyf0TYxI",
+            authDomain: "simple-login-3f73a.firebaseapp.com",
+            projectId: "simple-login-3f73a",
+            storageBucket: "simple-login-3f73a.appspot.com",
+            messagingSenderId: "622220968094",
+            appId: "1:622220968094:web:c219e77b41b4222555fb8f",
+            measurementId: "G-5LMTNYDPSB"
+        };
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyAtAsCAld8L6Gn96mkDYXQZSMqQyf0TYxI",
-        authDomain: "simple-login-3f73a.firebaseapp.com",
-        projectId: "simple-login-3f73a",
-        storageBucket: "simple-login-3f73a.firebasestorage.app",
-        messagingSenderId: "622220968094",
-        appId: "1:622220968094:web:c219e77b41b4222555fb8f",
-        measurementId: "G-5LMTNYDPSB"
-    };
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
 
-    const signInButton = document.getElementById('signInButton');
-    const profilePicture = document.getElementById('profile-picture');
+        const signInButton = document.getElementById('signInButton');
+        const profilePicture = document.getElementById('profile-picture');
 
-    // Check auth state to update UI accordingly
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            signInButton.style.display = 'none'; // Hide sign in button
-            profilePicture.style.display = 'inline'; // Show profile picture
-            if (localStorage.getItem('google-user')) {
-                // Google sign-in profile picture
-                const googleUser = JSON.parse(localStorage.getItem('google-user'));
-                profilePicture.src = googleUser.picture; // Set Google profile picture
-                profilePicture.onclick = function() {
-                    window.location.href = 'gprofile.html'; // Redirect to Google profile page
-                };
-            } else {
-// Firebase sign-in profile picture
-if (localStorage.getItem('profile-pic')) {
-    // Use the profile picture from localStorage if available
-    profilePicture.src = localStorage.getItem('profile-pic');
-    profilePicture.onclick = function() {
-        window.location.href = 'profile.html'; // Redirect to Firebase profile page
-    };
-} else {
-    // Fallback to Firebase photoURL if no localStorage profile-pic is found
-    profilePicture.src = user.photoURL || 'https://i.postimg.cc/Fsxcnzf5/727399.png'; // Default Firebase profile picture
-    profilePicture.onclick = function() {
-        window.location.href = 'profile.html'; // Redirect to Firebase profile page
-    };
-}
+        // Listen to auth state changes
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in
+    const profilePicUrl = user.photoURL || localStorage.getItem('profile-pic') || 'https://i.postimg.cc/Fsxcnzf5/727399.png';
+    profilePicture.src = profilePicUrl;
+    profilePicture.style.display = 'block';
+    signInButton.style.display = 'none';
+  } else {
+    // No user is signed in
+    profilePicture.style.display = 'none';
+    signInButton.style.display = 'inline-block';
+  }
+});
 
-            }
-        } else {
-            signInButton.style.display = 'inline'; // Show sign in button if not logged in
-            profilePicture.style.display = 'none'; // Hide profile picture
-        }
-    });
-</script>
+    </script>
 
     <script>
         function search() {
-           const query = document.getElementById('searchQuery').value;
-           if (query) {
-              window.location.href = `results.html?q=${encodeURIComponent(query)}`;
-           }
+            const query = document.getElementById('searchQuery').value;
+            if (query) {
+                window.location.href = `results.html?q=${encodeURIComponent(query)}`;
+            }
         }
-
     </script>
+
 </body>
 </html>
-
-
