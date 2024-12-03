@@ -99,12 +99,22 @@
     }
   });
 
-  // Google Sign-In callback
   window.handleGoogleSignIn = (response) => {
-  const googleUserData = jwt_decode(response.credential); // Use jwt-decode library
-  localStorage.setItem('googleUserData', JSON.stringify(googleUserData));
-  window.location.href = 'Googleprofile.html';
+  try {
+    const googleUserData = jwt_decode(response.credential); // Decode the JWT
+    console.log('Google User Data:', googleUserData); // Log for debugging
+    
+    // Save data or perform additional checks
+    localStorage.setItem('googleUserData', JSON.stringify(googleUserData));
+
+    // Redirect to the desired page
+    window.location.href = 'Googleprofile.html';
+  } catch (error) {
+    console.error('Google Sign-In Error:', error);
+    alert('Google Sign-In failed. Please try again.');
+  }
 };
+
 
 </script>
 
