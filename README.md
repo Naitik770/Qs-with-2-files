@@ -7,6 +7,7 @@ This is a web application that allows users to sign in and access a personalized
 - Image search
 - Video search
 - Book search
+- Music search 
 
 ## Features
 - User authentication via email/password and Google sign-in.
