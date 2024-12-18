@@ -7,10 +7,9 @@ This is a web application that allows users to sign in and access a personalized
 - Image search
 - Video search
 - Book search
-- Music search 
 
 ## Features
-- User authentication via email/password and Google sign-in.
+- User authentication via email/password
 - Personalized user experience after successful login.
 - Simple and intuitive user interface.
 
@@ -18,7 +17,7 @@ This is a web application that allows users to sign in and access a personalized
 
 You can try the live demo of the app here:
 
-[Live Demo](https://www.searchspace.netlify.app)
+https://www.searchspace.netlify.app
 
 ## Technologies Used
 
@@ -26,7 +25,6 @@ You can try the live demo of the app here:
 - CSS
 - JavaScript
 - Firebase Authentication
-- Google Sign-In API
 - Netlify for deployment
 
 ## Setup
