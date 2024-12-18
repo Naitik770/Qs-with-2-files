@@ -7,18 +7,18 @@
   <link rel="stylesheet" href="styles.css">
   <style>
     /* Your existing styles */
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #fff;
-      margin: 0;
-      padding: 0;
-    }
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  
+}
+
 
     .container {
       max-width: 100%;
       padding: 15px;
       background-color: #fff;
-     
     }
 
     .profile-info {
@@ -74,7 +74,7 @@
       width: 150px;
       height: 150px;
       border-radius: 50%;
-      border: 2px solid #ddd;
+      border: 5px solid #D3D3D3;
       object-fit: cover;
       margin-bottom: 10px;
     }
@@ -118,17 +118,120 @@
       border-bottom:2px solid #4285F4; 
       
     }
+   
+   
+
+
+/* Small devices (phones, less than 600px) */
+@media (max-width: 600px) {
+  .profile-info p {
+    font-size: 18px;
+  }
+
+  .btn-logout {
+    width: 150px;
+    font-size: 14px;
+  }
+
+  .profile-picture img {
+    width: 150px;
+    height: 150px;
+  }
+
+  .container {
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 40px;
+  }
+}
+
+/* Medium devices (tablets, 600px to 1024px) */
+@media (min-width: 600px) and (max-width: 1024px) {
+      
+      .btn-back {
+      color: #4285F4;
+      margin-right: 700px;
+      font-size: 60px;
+      
+    }
     
+    
+      .edit-icon img {
+      height:52px;
+      color: #4285F4;
+      margin-left: 20px;
+    }
+
+    .edit-input {
+      font-size: 50px;
+      border: none;
+      background: none;
+      outline: none;
+      color: #555;
+      width: 500px;
+      display: none;
+    }
+
+    .edit-input:focus {
+      border-bottom:3px solid #4285F4; 
+      
+    }
+  
+  .container {
+    padding: 20px;
+    margin-bottom: 478px;
+  }
+
+  .profile-picture img {
+    width: 400px;
+    height: 400px;
+    
+  }
+
+
+
+  h1 {
+    font-size: 100px;
+    top: 68px;
+    margin-bottom: 200px;
+  }
+
+    .profile-info p {
+    font-size: 50px;
+  }
+
+  .btn-logout {
+    width: 300px;
+    font-size: 50px;
+  }
+  
+      .upload-btn {
+      background-color: #ff4d4d;
+      color: #fff;
+      padding: 25px 35px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 45px;
+    }
+    
+
+
+}
+
   </style>
 </head>
 <body>
 
-  <div class="container">
+
     <button class="btn-back" onclick="window.location.href='index.html'" id="back-btn">&#8592; Back</button>
+      <div class="container">
     <h1>User Profile</h1>
     <!-- Profile Picture -->
     <div class="profile-picture">
-      <img id="profile-pic" src="https://i.postimg.cc/Fsxcnzf5/727399.png" alt="Profile Picture">
+      <img id="profile-pic" src="https://i.postimg.cc/Fsxcnzf5/727399.png" alt="">
       <label class="upload-btn" for="upload-picture">Change Picture</label>
       <input type="file" id="upload-picture" accept="image/*">
     </div>
@@ -235,20 +338,20 @@
 
   // When the user selects a file
   uploadPictureInput.addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
 
-      // Load the selected file into an image preview and save to localStorage
-      reader.onload = function (e) {
-        const base64Image = e.target.result;
-        profilePicElement.src = base64Image; // Update the displayed profile picture
-        localStorage.setItem('profile-pic', base64Image); // Save the picture in localStorage
-      };
+    // Load the selected file into an image preview and save to localStorage
+    reader.onload = function (e) {
+      const base64Image = e.target.result;
+      profilePicElement.src = base64Image; // Update the displayed profile picture
+      localStorage.setItem('profile-pic', base64Image); // Save the picture in localStorage
+    };
 
-      reader.readAsDataURL(file);
-    }
-  });
+    reader.readAsDataURL(file);
+  }
+});
 
 </script>
 
