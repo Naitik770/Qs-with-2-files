@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="description" content="Search space for images, videos, news, and more">
+    <meta name="description" content="search engine, google like search engine, google clone, search space, searchspace, web search engine, search engine clone, bing clone, custom search engine, video search engine">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search space</title>
@@ -9,20 +11,20 @@
  
 <style>
 
-body {
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-min-height: 100vh;
-margin: 0;
-width: 100%;
-font-family: Arial, sans-serif;
-background-color: #ffffff;
--webkit-tap-highlight-color: transparent;
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+        width: 100%;
+        font-family: Arial, sans-serif;
+        background-color: #ffffff;
+       -webkit-tap-highlight-color: transparent;
+     
+     }
 
-}
-        
         .logo {
            font-size: 51px;
            margin-bottom: 15px;
@@ -108,7 +110,7 @@ background-color: #ffffff;
      #searchicon {
         content: "";
         position: absolute;
-        margin-top: 5px; /* Align icon vertically */
+        margin-top: 3px; /* Align icon vertically */
         margin-left: 3px; /* Align icon horizontally */
     }
 
@@ -152,9 +154,9 @@ background-color: #ffffff;
       transition: transform 0.3s ease, color 0.3s ease;
     }
     
-        .mic-icon:hover {
-           background: transparent;
-           background-color: transparent;
+   .mic-icon:hover {
+      background: transparent;
+      background-color: transparent;
     }
 
 .voice-prompt {
@@ -261,20 +263,12 @@ background-color: #ffffff;
       }
     }
     
-    
-    
-    
-    
-    
-    
-    
+   
 /* General responsiveness for small devices */
 @media only screen and (max-width: 600px) {
     .logo {
         font-size: 51px;
     }
-
-
 
     #signInButton {
            position: relative;
@@ -312,7 +306,6 @@ background-color: #ffffff;
         box-shadow: 0 1px 3px rgba(60, 64, 67, 0.3);
         
        }
-        
         
          .btn:active {
              background-color: #e8e8e8;
@@ -413,40 +406,78 @@ background-color: #ffffff;
         font-size: 40px;
 
     }
-    
-    #history{
-       font-size: 50px;
-    }
 }
 
-.history-icon {
-   content: "";
-   font-family: 'Material Symbols Outlined';
-   font-size: 36px;
-   color: #222;
-   cursor: pointer;
-   transition: color 0.3s ease;
-   position: absolute;
-   top: 5px;
-   left: 10px;
+/* Sidebar container */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px; /* Start hidden */
+  height: 100%;
+  width: 250px;
+  background-color: #ffffff;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  transition: left 0.3s ease;
+  overflow: auto;
 }
 
-.history-icon:active {
-   color: #7F7F7F; /* Hover color */
-   transform: scale(1.2);
+/* Sidebar content */
+.sidebar-content {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
+/* Close button */
+.close-btn {
+  font-size: 24px;
+  cursor: pointer;
+  align-self: flex-end;
+}
 
-#history{
-   content: "";
+/* Sidebar buttons */
+.sidebar-button {
+  padding: 10px 15px;
+  font-size: 16px;
+  border: none;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.sidebar-button:hover {
+  background-color: #e0e0e0;
+}
+
+/* Menu icon */
+.menu-icon {
+  font-family: 'Material Icons';
+  font-size: 36px;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: #222;
+  
 }
 
 </style>
 </head>
 <body>
-    <div>
-       <span class="history-icon" id="history">history</span>
-    </div>
+<div id="sidebar" class="sidebar">
+  <div class="sidebar-content">
+    <span class="close-btn" id="closeSidebar">×</span>
+    <h1>Menu</h1>
+    <button class="sidebar-button" onclick="navigateTo('history.html')">History</button>
+    <button class="sidebar-button" onclick="navigateTo('profile.html')">Profile</button>
+
+</div>
+</div>
+<img src="/menu.svg" class="menu-icon" id="menuIcon" />
+
 <!-- Speech Modal -->
 <div id="overlay" style="display: none;"></div>
 <div id="speech-modal" class="voice-prompt" style="display: none;">
@@ -541,25 +572,14 @@ onAuthStateChanged(auth, (user) => {
     }
     
     
-    
-    document.getElementById("history").addEventListener("click", () => {
-        window.location.href = "history.html";
-    });
-
-
-
 function search() {
-   const query = document.getElementById('searchQuery').value;
+   const query = document.getElementById('searchQuery').value.trim();
    if (query) {
-      window.location.href = `results.html?q=${encodeURIComponent(query)}`;
+      const encodedQuery = encodeURIComponent(query);
+      window.location.href = `/search.html?q=${encodedQuery}`; // Add the query as a URL parameter
    }
 }
 
-
-
-
-
-       
 function startVoiceSearch() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -570,7 +590,6 @@ function startVoiceSearch() {
 
     const recognition = new SpeechRecognition();
     recognition.lang = "en-US";
-
     const speechModal = document.getElementById("speech-modal");
     const speechStatus = document.getElementById("speech-status");
     const overlay = document.getElementById("overlay");
@@ -611,7 +630,7 @@ function startVoiceSearch() {
             speechModal.style.display = "none";
             overlay.style.display = "none";
             wave.classList.remove("wave"); // Remove the wave animation class
-        }, 500); // 2-second delay before hiding the modal
+        }, 500); // delay before hiding the modal
     };
 
     // Stop voice recognition and hide modal on overlay click
@@ -635,6 +654,26 @@ document.getElementById("mic-button").addEventListener("click", startVoiceSearch
           }
         });
          
+         // Sidebar toggle functionality
+const sidebar = document.getElementById("sidebar");
+const menuIcon = document.getElementById("menuIcon");
+const closeSidebar = document.getElementById("closeSidebar");
+
+// Function to open sidebar
+menuIcon.addEventListener("click", () => {
+  sidebar.style.left = "0";
+});
+
+// Function to close sidebar
+closeSidebar.addEventListener("click", () => {
+  sidebar.style.left = "-250px";
+});
+
+// Navigation function
+function navigateTo(url) {
+  window.location.href = url;
+}
+
     </script>
 </body>
 </html>
