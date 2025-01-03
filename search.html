@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+ 
+    <style>
+        /* Existing CSS */
+        body {
+           font-family: Arial, sans-serif;
+           color: #202124;
+           margin: 0;
+           padding: 0;
+           background-color: #fff;
+        }
+        
+        .header {
+           display: flex;
+           align-items: center;
+           padding: 10px 20px;
+        }
+        
+        .logo {
+           font-size: 24px;
+           color: #4285F4;
+           text-shadow: -1px 0 #EA4335, 1px 0 #FBBC05, 2px 0 #34A853;
+           margin-right: 15px;
+        }
+        
+        .search-bar {
+           flex-grow: 1;
+           display: flex;
+           align-items: center;
+           border: 1px solid #dfe1e5;
+           border-radius: 24px;
+           padding: 5px 10px;
+           max-width: 500px;
+        }
+        
+        .search-bar input {
+           border: none;
+           outline: none;
+           width: 100%;
+           font-size: 16px;
+           padding: 8px;
+        }
+        
+        .search-bar .icon {
+           content: "";
+           transition: transform 0.3s ease, color 0.3s ease;
+           font-family: 'Material Icons';
+           color: #5f6368;
+           font-size: 30px;
+           margin-right: 1px;
+        }
+        
+        
+        .results-info {
+           padding: 1px 10px;
+           color: #70757A;
+           margin: 1px;
+           font-size: 15px;
+           
+        }
+        
+        .result {
+           padding: 15px 20px;
+           border-bottom: 1px solid #ebebeb;
+        }
+        
+        .result a {
+           font-size: 18px;
+           color: #1A0DAB;
+           text-decoration: none;
+        }
+        
+        .result a:hover {
+           text-decoration: underline;
+        }
+        
+        .result .url {
+           color: #008027;
+           font-size: 14px;
+           margin-bottom: 5px;
+           display: block;
+        }
+        
+        .result p {
+           color: #4d5156;
+           font-size: 14px;
+           margin: 0;
+        }
+        
+        .tab-container {
+            display: flex;
+            border-bottom: 2px solid #ccc;
+            width: 200px;
+            outline: none;
+            border: none;
+            background-color: transparent;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            color: #999;
+            font-weight: bold;
+            flex: 1;
+            background-color: #fff;
+            outline: none;
+            border: none;
+            text-align: center;
+            position: relative;
+        }
+        
+        .tab::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: transparent;
+            transition: background-color 0.3s ease;
+        }
+        
+        .tab.active {
+            color: black;
+        }
+        
+        .tab.active::after {
+            background-color: black;
+        }
+
+        /* Styling for image, video, and book results */
+        .image-result, .video-result, .book-result {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            margin-bottom: 40px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-result img, .book-result img {
+            max-width: 100%;
+            border-radius: 5px;
+        }
+
+        .video-result iframe {
+            max-width: 100%;
+            border-radius: 5px;
+        }
+
+        .book-result span {
+            margin-top: 8px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+       .tab-container-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    display: flex;
+    margin-bottom:;
+}
+
+.tab-container {
+    display: inline-flex;
+    width: auto;
+    margin-bottom: 17px;
+}
+.tab {
+    position: relative; /* Required for the underline to position relative to the tab */
+    padding: 10px 17px;
+    cursor: pointer;
+    color: #999;
+    flex: none; /* Prevent shrinking in the scrollable container */
+    background-color: #fff;
+    outline: none;
+    border: none;
+    text-align: center;
+}
+
+.tab::after {
+    content: '';
+    position: absolute;
+    bottom: 0; /* Adjusted to align properly with the tab */
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+}
+
+.tab.active {
+    color: black;
+}
+
+.tab.active::after {
+    background-color: black; /* Makes the underline visible for the active tab */
+}
+
+
+
+.safe-search-bar {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background-color: #FAFAFA;
+   border-radius: 50px;
+   width: 295px;
+   padding: 10px;
+   margin-left: 2px;
+   gap: 5px;
+   box-shadow: 0 1px 5px rgba(32, 33, 36, 0.28);
+
+}
+
+.label {
+   font-size: 17px;
+   color:#252525;
+   font-weight: 500;
+   margin-left: 10px;
+}
+
+.button {
+   padding: 8px 16px;
+   border: 1px solid #ddd;
+   border-radius: 20px;
+   margin-right: 5px;
+   cursor: pointer;
+   background-color: white;
+   color: #333;
+   font-size: 14px;
+   white-space: nowrap;
+}
+
+.button.active {
+   background-color: #dbeafe;
+   border-color: #dbeafe;
+   color: #1e40af;
+}
+
+.button.active::before {
+   content: "\2713";
+   /* Checkmark character */
+   margin-right: 5px;
+}
+/* Search Results Styling */
+.search-results {
+    margin: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.result-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.result-item img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    transition: filter 0.3s ease;
+}
+
+.result-item img.blurred {
+    filter: blur(8px);
+}
+
+
+
+
+.tab-container-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    display: flex;
+    margin-bottom: 0;
+    scrollbar-width: none; /* Hides scrollbar in Firefox */
+    -ms-overflow-style: none; /* Hides scrollbar in IE/Edge */
+}
+
+.tab-container-wrapper::-webkit-scrollbar {
+    display: none; /* Hides scrollbar in Chrome, Safari, Opera */
+}
+
+.tab-container {
+    display: inline-flex;
+    width: auto;
+    margin-bottom: 17px;
+    border-bottom: none; /* Removes the underline */
+}
+
+.tab {
+    position: relative;
+    padding: 10px 17px;
+    cursor: pointer;
+    color: #999;
+    flex: none;
+    background-color: #fff;
+    outline: none;
+    border: none;
+    text-align: center;
+}
+
+.tab::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+}
+
+.tab.active {
+    color: black;
+}
+
+.tab.active::after {
+    background-color: black; /* Underline for active tab */
+}
+
+
+ 
+    .news-item {
+       margin-top: 20px;
+      display: flex;
+      background: ;
+      margin-bottom: 15px;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+    .news-item:hover {
+      transform: scale(1.02);
+    }
+    .thumbnail {
+      flex-shrink: 0;
+      width: 100px;
+      height: 100px;
+      margin-right: 15px;
+    }
+    .thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+    .content {
+      flex: 1;
+    }
+    .content h3 {
+      margin: 0 0 5px;
+      font-size: 18px;
+      color: #fff;
+    }
+    .content h3 a {
+      text-decoration: none;
+      color: #1DA1F2;
+    }
+    .content h3 a:hover {
+      text-decoration: underline;
+    }
+    .content .details {
+      font-size: 14px;
+      color: #BBBBBB;
+    }
+    .source-logo {
+      display: inline-block;
+      vertical-align: middle;
+      width: 20px;
+      height: 20px;
+      margin-right: 5px;
+    }
+    .source-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo" onclick="window.history.back()">Search space</div>
+        <div class="search-bar" id="search-bar">
+            <span class="icon">search</span>
+            <input type="text" id="searchBox" placeholder="">
+        </div>
+    </div>
+<div class="tab-container-wrapper">
+    <div class="tab-container">
+        <button type="button" id="web-search" class="tab active" data-type="web">WEB</button>
+        <button type="button" id="image-search" class="tab" data-type="image">IMAGE</button>
+        <button type="button" id="news-search" class="tab" data-type="news">NEWS</button>
+        <button type="button" id="books-search" class="tab" data-type="books">BOOKS</button>
+        <button type="button" id="video-search" class="tab" data-type="video">VIDEO</button>
+        
+    </div>
+</div>
+<div class="safe-search-bar">
+    <span class="label">SafeSearch</span>
+    <div class="button active" id="safeSearchOff">Off</div>
+    <div class="button" id="safeSearchModerate">On</div>
+    <div class="button" id="safeSearchStrict">Filter</div>
+</div>
+
+
+    <div class="results-info" id="resultsInfo"><h2>Loading. . .</h2></div>
+    <div id="resultsContainer"></div>
+
+    <script>
+const apiKeys = {
+  web: 'AIzaSyATr6XBO1PfMf9a6DDkTwurXrPQB36I2BQ',
+  image: 'AIzaSyA_J9kXtIxGrWQ9mFTOlixoLppR5uldNE0',
+  video: 'AIzaSyD5ME5xg7klHmfrm3NGy2sOPl9kr3lCqa4',
+  books: 'AIzaSyCjguzisfSD3feJ4Fr1C9kq9WEmiAEk6XY',
+  news: '0e702507b5b948419f451174f73decbe' // Newsapi API key
+};
+
+const cseId = '06c7bdfb887e2443d';
+
+document.addEventListener('DOMContentLoaded', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const query = urlParams.get('q');
+  document.getElementById('searchBox').value = query;
+
+  if (query) {
+    fetchResults(query);
+  }
+});
+document.addEventListener('DOMContentLoaded', () => {
+   const urlParams = new URLSearchParams(window.location.search);
+   const query = urlParams.get('q');
+   document.getElementById('searchBox').value = query;
+
+   if (query) {
+      fetchResults(query);
+   }
+
+   // Refresh every minute (60000ms)
+   setInterval(() => {
+      if (query) {
+         fetchResults(query);
+      }
+   }, 60000); // Refresh every 1 minute
+});
+function fetchResults(query, type = 'web') {
+    const apiKey = apiKeys[type];
+    let apiUrl;
+
+    if (type === 'image') {
+        apiUrl = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cseId}&q=${query}&searchType=image`;
+    } else if (type === 'video') {
+        apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&q=${query}&type=video&part=snippet&maxResults=10`;
+    } else if (type === 'books') {
+        apiUrl = `https://www.googleapis.com/books/v1/volumes?q=${query}&key=${apiKey}`;
+    } else if (type === 'news') {
+        apiUrl = `https://newsapi.org/v2/everything?q=${query}&apiKey=${apiKeys.news}`;
+    } else {
+        apiUrl = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cseId}&q=${query}`;
+    }
+
+    // Add SafeSearch parameter for supported APIs
+    if ((type === 'web' || type === 'image') && safeSearchLevel === 'moderate') {
+        apiUrl += '&safe=medium';
+    } else if ((type === 'web' || type === 'image') && safeSearchLevel === 'strict') {
+        apiUrl += '&safe=high';
+    }
+
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            displayResults(data, query, type);
+        })
+        .catch(error => console.error('Error fetching data:', error));
+}
+
+
+function displayResults(data, query, type) {
+    const resultsContainer = document.getElementById('resultsContainer');
+    const resultsInfo = document.getElementById('resultsInfo');
+    resultsContainer.innerHTML = '';
+
+    if (type === 'news') {
+        resultsInfo.textContent = `Showing news results for "${query}"`;
+
+        if (data.articles && data.articles.length > 0) {
+            data.articles.forEach(article => {
+                if (article.title && article.url && article.description && article.urlToImage) {
+                    const newsDiv = document.createElement('div');
+                    newsDiv.classList.add('news-item');
+                    newsDiv.innerHTML = `
+                    <div class="thumbnail">
+                        <img src="${article.urlToImage}" alt="">
+                    </div>
+                    <div class="content">
+                        <h3>
+                            <a href="${article.url}" target="_blank">${article.title}</a>
+                        </h3>
+                        <div class="details">
+                            <div class="source-logo">
+                                <img src="https://logo.clearbit.com/${article.source.name.toLowerCase().replace(/\s+/g, '')}.com" alt="">
+                            </div>
+                            <span>${article.source.name || 'Unknown Source'}</span> •
+                            <span>${new Date(article.publishedAt).toLocaleDateString()}</span>
+                        </div>
+                    </div>
+                    `;
+                    resultsContainer.appendChild(newsDiv);
+                }
+            });
+
+            if (!resultsContainer.children.length) {
+                resultsInfo.textContent = `No valid news results found for "${query}".`;
+            }
+        }
+    } else if (type === 'image') {
+        resultsInfo.textContent = `Showing image results for "${query}"`;
+        if (data.items) {
+            data.items.forEach(item => {
+                const imageDiv = document.createElement('div');
+                imageDiv.classList.add('image-result');
+                imageDiv.innerHTML = `
+                    <a href="${item.image.contextLink}" target="_blank">
+                        <img src="${item.link}" alt="">
+                    </a>
+                    <span>${item.title}</span>
+                `;
+                resultsContainer.appendChild(imageDiv);
+            });
+        }
+    } else if (type === 'video') {
+        resultsInfo.textContent = `Showing video results for "${query}"`;
+        data.items.forEach(item => {
+            const videoDiv = document.createElement('div');
+            videoDiv.classList.add('video-result');
+            videoDiv.innerHTML = `
+                <iframe width="320" height="180" src="https://www.youtube.com/embed/${item.id.videoId}" frameborder="0" allowfullscreen></iframe>
+                <span>${item.snippet.title}</span>
+            `;
+            resultsContainer.appendChild(videoDiv);
+        });
+    } else if (type === 'books') {
+        resultsInfo.textContent = `Showing book results for "${query}"`;
+        data.items.forEach(item => {
+            const bookDiv = document.createElement('div');
+            bookDiv.classList.add('book-result');
+            const imageUrl = item.volumeInfo.imageLinks ? item.volumeInfo.imageLinks.thumbnail : 'https://via.placeholder.com/128x192';
+            bookDiv.innerHTML = `
+                <img src="${imageUrl}" alt="${item.volumeInfo.title}">
+                <span>${item.volumeInfo.title}</span>
+                <p>Author: ${item.volumeInfo.authors ? item.volumeInfo.authors.join(', ') : 'Unknown'}</p>
+                <a href="${item.volumeInfo.infoLink}" target="_blank">More Info</a>
+            `;
+            resultsContainer.appendChild(bookDiv);
+        });
+    } else {
+        resultsInfo.textContent = `Showing web results for "${query}"`;
+        data.items.forEach(item => {
+            const resultDiv = document.createElement('div');
+            resultDiv.classList.add('result');
+            resultDiv.innerHTML = `
+                <span class="url">${item.displayLink}</span>
+                <a href="${item.link}" target="_blank">${item.title}</a>
+                <p>${item.snippet}</p>
+            `;
+            resultsContainer.appendChild(resultDiv);
+        });
+    }
+}
+
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', function () {
+    const type = this.getAttribute('data-type');
+    const query = document.getElementById('searchBox').value;
+    if (query) {
+      fetchResults(query, type);
+    }
+
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+let safeSearchLevel = 'off'; // Default SafeSearch level
+
+document.querySelectorAll('.button').forEach(button => {
+    button.addEventListener('click', function () {
+        document.querySelectorAll('.button').forEach(opt => opt.classList.remove('active'));
+        this.classList.add('active');
+        safeSearchLevel = this.id.replace('safeSearch', '').toLowerCase();
+
+        const query = document.getElementById('searchBox').value;
+        const activeTab = document.querySelector('.tab.active').getAttribute('data-type');
+        if (query) {
+            fetchResults(query, activeTab);
+        }
+    });
+});
+
+
+    </script>
+</body>
+</html> 
