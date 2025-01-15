@@ -17,7 +17,7 @@ This is a web application that allows users to sign in and access a personalized
 
 You can try the live demo of the app here:
 
-https://www.searchspace.netlify.app
+www.searchspace.netlify.app
 
 ## Technologies Used
 
